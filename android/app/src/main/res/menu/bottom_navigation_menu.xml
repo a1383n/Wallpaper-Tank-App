@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_home"
+        android:title="Home"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_wallpaper_24"/>
+    <item
+        android:id="@+id/menu_category"
+        android:title="Category List"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_category_24"/>
+    <item
+        android:id="@+id/menu_setting"
+        android:enabled="true"
+        android:title="Setting"
+        android:icon="@drawable/ic_baseline_settings_24"/>
+</menu>
