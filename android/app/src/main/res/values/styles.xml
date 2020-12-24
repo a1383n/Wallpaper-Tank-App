@@ -1,12 +1,20 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-    <style name="BottomNavigationCustomStyle" parent="Widget.MaterialComponents.BottomNavigationView">
-        <item name="fontFamily">@font/open_sans_bold</item>
+    <style name="Widget.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemTextAppearanceActive">@style/BottomNavigationTextActivate</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavigationTextInactivate</item>
     </style>
+
+    <style name="BottomNavigationTextInactivate">
+        <item name="fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">12sp</item> <!-- Disable the zoom animation when switch tab -->
+    </style>
+
+    <style name="BottomNavigationTextActivate" parent="BottomNavigationTextInactivate" />
 </resources>

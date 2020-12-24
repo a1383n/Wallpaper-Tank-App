@@ -47,7 +47,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:labelVisibilityMode="auto"
-        android:theme="@style/BottomNavigationCustomStyle"
         app:itemTextColor="@color/nav_color"
         app:itemIconTint="@color/nav_color"
         app:menu="@menu/bottom_navigation_menu" />
