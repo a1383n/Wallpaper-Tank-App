@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+<<<<<<< Updated upstream
+        <item>@font/montserrat</item>
+        <item>@font/open_sans_bold</item>
+=======
+        <item>@font/marmelad</item>
+        <item>@font/open_sans_bold</item>
+        <item>@font/open_sans_light</item>
+>>>>>>> Stashed changes
+    </array>
+</resources>
