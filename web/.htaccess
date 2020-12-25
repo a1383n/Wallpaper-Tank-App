@@ -2,13 +2,8 @@ RewriteEngine On
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule   ^api/([^/]+)/([^/]+)/([0-9]+)   api/index.php?type=$1&action=$2&id=$3 [NC,L]
+RewriteRule  ^api/ajax/([^/]+)  api/ajax/index.php?action=$1 [NC,L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule   ^api/([^/]+)/([^/]+)   api/index.php?type=$1&action=$2 [NC,L]
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule   ^api/([^/]+)  api/index.php?type=$1 [NC,L]
-
+RewriteRule  ^api/web/([^/]+)  api/web/index.php?action=$1 [NC,L]
