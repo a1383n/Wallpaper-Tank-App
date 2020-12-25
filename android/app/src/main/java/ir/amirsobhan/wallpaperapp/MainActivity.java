@@ -2,6 +2,7 @@ package ir.amirsobhan.wallpaperapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
@@ -76,6 +77,14 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        //When user switch between pages, previous page data don't destroyed
+        viewPager.setOffscreenPageLimit(3);
+
+        //When user scroll, hide/show bottomNavigationView
+        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) navigationView.getLayoutParams();
+        layoutParams.setBehavior(new BottomNavigationBehavior());
+
     }
     private void Initialization(){
         navigationView = findViewById(R.id.bottom_navigation);

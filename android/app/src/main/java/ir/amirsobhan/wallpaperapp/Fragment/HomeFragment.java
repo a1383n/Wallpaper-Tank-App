@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -22,6 +25,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -33,21 +37,23 @@ import java.util.List;
 import java.util.Map;
 
 import ir.amirsobhan.wallpaperapp.Adapter.WallpaperAdapter;
+import ir.amirsobhan.wallpaperapp.BottomNavigationBehavior;
 import ir.amirsobhan.wallpaperapp.Databases.WallpaperDB;
 import ir.amirsobhan.wallpaperapp.Model.Wallpaper;
 import ir.amirsobhan.wallpaperapp.R;
 
 public class HomeFragment extends Fragment {
     RecyclerView recyclerView;
+    ProgressBar progressBar;
     WallpaperAdapter adapter;
     List<Wallpaper> wallpaperList = new ArrayList<Wallpaper>();
     WallpaperDB db;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        Initialization();
+        Initialization(view);
 
-        recyclerView = view.findViewById(R.id.wallpaper_recycler);
         RecyclerView.LayoutManager layoutManager = null;
 
         // Check device screen size
@@ -60,11 +66,14 @@ public class HomeFragment extends Fragment {
         }
         recyclerView.setLayoutManager(layoutManager);
         getWallpaperList();
+
         return view;
     }
 
-    private void Initialization() {
+    private void Initialization(View view) {
         db = new WallpaperDB(getContext());
+        recyclerView = view.findViewById(R.id.wallpaper_recycler);
+        progressBar = view.findViewById(R.id.wallpaper_recycler_progress);
     }
 
     private void getWallpaperList() {
@@ -80,7 +89,8 @@ public class HomeFragment extends Fragment {
                 Gson gson = gsonBuilder.create();
 
                 // Set TypeToken
-                Type type = new TypeToken<List<Wallpaper>>() {}.getType();
+                Type type = new TypeToken<List<Wallpaper>>() {
+                }.getType();
 
                 // Convert JSON to OBJECT
                 wallpaperList = gson.fromJson(response, type);
@@ -88,10 +98,15 @@ public class HomeFragment extends Fragment {
                 adapter = new WallpaperAdapter(getContext(), wallpaperList);
                 recyclerView.setAdapter(adapter);
 
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+
                 //Sync SERVER with local database
-                for (int i = 0; i < wallpaperList.size(); i++){
-                    if (!db.isExist(wallpaperList.get(i).getId())){
+                for (int i = 0; i < wallpaperList.size(); i++) {
+                    if (!db.isExist(wallpaperList.get(i).getId())) {
                         db.Insert(wallpaperList.get(i));
+                        BottomNavigationView navigationView = getActivity().findViewById(R.id.bottom_navigation);
+                        navigationView.getOrCreateBadge(R.id.menu_home).setNumber(navigationView.getOrCreateBadge(R.id.menu_home).getNumber()+1);
                     }
                 }
             }

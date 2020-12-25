@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +15,25 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ir.amirsobhan.wallpaperapp.Databases.WallpaperDB;
+import ir.amirsobhan.wallpaperapp.Model.ApiResult;
 import ir.amirsobhan.wallpaperapp.Model.Wallpaper;
 import ir.amirsobhan.wallpaperapp.R;
 
@@ -26,6 +41,8 @@ public class WallpaperAdapter extends RecyclerView.Adapter<WallpaperAdapter.Wall
     private Context context;
     private List<Wallpaper> wallpaperList;
     private WallpaperDB db;
+    private boolean newLike_ok;
+    private boolean removeLike_ok;
 
     public WallpaperAdapter(Context context, List<Wallpaper> wallpaperList) {
         this.context = context;
@@ -63,15 +80,17 @@ public class WallpaperAdapter extends RecyclerView.Adapter<WallpaperAdapter.Wall
                 @Override
                 public void onClick(View v) {
                     if (db.isLiked(wallpaper.getId())) {
-                        db.setLike(wallpaper.getId(), false);
                         holder.likeBtn.setImageDrawable(context.getDrawable(R.drawable.heart_checked_to_unchecked));
                         AnimatedVectorDrawable vectorDrawable = (AnimatedVectorDrawable) holder.likeBtn.getDrawable();
                         vectorDrawable.start();
+                        removeLike(wallpaper.getId());
+                        holder.likes.setText(Integer.parseInt(holder.likes.getText().toString())-1+"");
                     } else {
-                        db.setLike(wallpaper.getId(), true);
                         holder.likeBtn.setImageDrawable(context.getDrawable(R.drawable.heart_unchecked_to_checked));
                         AnimatedVectorDrawable vectorDrawable = (AnimatedVectorDrawable) holder.likeBtn.getDrawable();
                         vectorDrawable.start();
+                        newLike(wallpaper.getId());
+                        holder.likes.setText(Integer.parseInt(holder.likes.getText().toString())+1+"");
                     }
                 }
             });
@@ -85,15 +104,127 @@ public class WallpaperAdapter extends RecyclerView.Adapter<WallpaperAdapter.Wall
                 @Override
                 public void onClick(View v) {
                     if (db.isLiked(wallpaper.getId())) {
-                        db.setLike(wallpaper.getId(), false);
                         holder.likeBtn.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                        removeLike(wallpaper.getId());
+                        holder.likes.setText(Integer.parseInt(holder.likes.getText().toString())-1+"");
                     } else {
-                        db.setLike(wallpaper.getId(), true);
                         holder.likeBtn.setImageResource(R.drawable.ic_baseline_favorite_24);
+                        newLike(wallpaper.getId());
+                        holder.likes.setText(Integer.parseInt(holder.likes.getText().toString())+1+"");
                     }
                 }
             });
         }
+    }
+
+    private boolean newLike(final int id) {
+        RequestQueue queue = Volley.newRequestQueue(context);
+        final String url = "https://amirsobhan.ir/wallpaper/api/web/newLike";
+
+        // sync this action with database
+        db.setLike(id, true);
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("Action Url",url);
+
+                //Initialization GSON
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                Gson gson = gsonBuilder.create();
+
+                // Set TypeToken
+                Type type = new TypeToken<ApiResult>() {
+                }.getType();
+
+                // Convert JSON to OBJECT
+                ApiResult result;
+                result = gson.fromJson(response, type);
+
+                //Check response
+                newLike_ok = result.getOk();
+
+                Log.d("Result", result.getOk() + "");
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                removeLike_ok = false;
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authentication", "123456789");
+
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("id", id+"");
+
+                return params;
+            }
+        };
+        queue.add(request);
+        return newLike_ok;
+    }
+
+    private boolean removeLike(final int id) {
+        RequestQueue queue = Volley.newRequestQueue(context);
+        final String url = "https://amirsobhan.ir/wallpaper/api/web/removeLike";
+
+        // sync this action with database
+        db.setLike(id, false);
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("Action Url",url);
+
+                //Initialization GSON
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                Gson gson = gsonBuilder.create();
+
+                // Set TypeToken
+                Type type = new TypeToken<ApiResult>() {
+                }.getType();
+
+                // Convert JSON to OBJECT
+                ApiResult result;
+                result = gson.fromJson(response, type);
+
+                //Check response
+                removeLike_ok = result.getOk();
+
+                Log.d("Result", result.getOk() + "");
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                removeLike_ok = false;
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authentication", "123456789");
+
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("id", id+"");
+
+                return params;
+            }
+        };
+        queue.add(request);
+        return removeLike_ok;
     }
 
     @Override

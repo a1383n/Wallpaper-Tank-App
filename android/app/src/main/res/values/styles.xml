@@ -6,15 +6,4 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-    <style name="Widget.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
-        <item name="itemTextAppearanceActive">@style/BottomNavigationTextActivate</item>
-        <item name="itemTextAppearanceInactive">@style/BottomNavigationTextInactivate</item>
-    </style>
-
-    <style name="BottomNavigationTextInactivate">
-        <item name="fontFamily">@font/open_sans_bold</item>
-        <item name="android:textSize">12sp</item> <!-- Disable the zoom animation when switch tab -->
-    </style>
-
-    <style name="BottomNavigationTextActivate" parent="BottomNavigationTextInactivate" />
 </resources>
