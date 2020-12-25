@@ -22,16 +22,22 @@ if (isset($action)) {
         case "getWallpapers":
             include "action/getWallpapers.php";
             break;
+        case "newLike":
+            include "action/newLike.php";
+            break;
+        case "removeLike":
+            include "action/removeLike.php";
+            break;
         case "getCategory":
             include "action/getCategory.php";
             break;
         default:
             http_response_code(404);
-            print_message(false,404);
+            print_message(false, 404);
             exit();
     }
 } else {
     http_response_code(400);
-    print_message(false,400);
+    print_message(false, 400);
     exit();
 }
