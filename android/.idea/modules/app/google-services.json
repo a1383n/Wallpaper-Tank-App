@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "933986902261",
+    "project_id": "wallpaper-a86b1",
+    "storage_bucket": "wallpaper-a86b1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:933986902261:android:d3f45390dbc2882e89a5bc",
+        "android_client_info": {
+          "package_name": "ir.amirsobhan.wallpaperapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "933986902261-dcpti0k5vs9kl493a1kf5lu06617g554.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ir.amirsobhan.wallpaperapp",
+            "certificate_hash": "2a68aac46ec9b153c22087ac3a29966f33d7ada1"
+          }
+        },
+        {
+          "client_id": "933986902261-sovcdsk5a73aou9b36upea03vr8s31f9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWC0GFVrg0jlxa1JL7E_IyVJwedPNiNpc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "933986902261-sovcdsk5a73aou9b36upea03vr8s31f9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
