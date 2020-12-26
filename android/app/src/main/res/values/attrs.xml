@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="ds">
-        
+        <attr name="app_background" format="color"/>
+        <attr name="item_background" format="color"/>
+        <attr name="nav_icon_color" format="color"/>
+        <attr name="textColor" format="color"/>
     </declare-styleable>
 </resources>
