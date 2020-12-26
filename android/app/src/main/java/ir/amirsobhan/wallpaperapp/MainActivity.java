@@ -2,6 +2,7 @@ package ir.amirsobhan.wallpaperapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -26,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
         // Initialization Views
         Initialization();
 
@@ -84,9 +88,9 @@ public class MainActivity extends AppCompatActivity {
         //When user scroll, hide/show bottomNavigationView
         CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) navigationView.getLayoutParams();
         layoutParams.setBehavior(new BottomNavigationBehavior());
-
     }
-    private void Initialization(){
+
+    private void Initialization() {
         navigationView = findViewById(R.id.bottom_navigation);
         viewPager = findViewById(R.id.main_viewpager);
         viewPager.setAdapter(new MainViewPagerAdapter(getSupportFragmentManager()));

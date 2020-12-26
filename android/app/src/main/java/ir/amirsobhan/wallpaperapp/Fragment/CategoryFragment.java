@@ -1,10 +1,13 @@
 package ir.amirsobhan.wallpaperapp.Fragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -41,6 +45,7 @@ public class CategoryFragment extends Fragment {
     ProgressBar progressBar;
     List<Category> categoryList = new ArrayList<Category>();
     CategoryDB db;
+    SwipeRefreshLayout refreshLayout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
@@ -48,11 +53,18 @@ public class CategoryFragment extends Fragment {
 
         getCategory();
 
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getCategory();
+            }
+        });
         return view;
     }
     private void Initialization(View view){
         recyclerView = view.findViewById(R.id.category_recycler);
         progressBar = view.findViewById(R.id.category_recycler_progressBar);
+        refreshLayout = view.findViewById(R.id.category_refresh);
 
         db = new CategoryDB(getContext());
 
@@ -61,7 +73,9 @@ public class CategoryFragment extends Fragment {
     }
 
     private void getCategory(){
-        RequestQueue queue = Volley.newRequestQueue(getContext());
+        recyclerView.setVisibility(View.GONE);
+
+        final RequestQueue queue = Volley.newRequestQueue(getContext());
         String url = "https://amirsobhan.ir/wallpaper/api/web/getCategory";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -83,6 +97,8 @@ public class CategoryFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
 
+                refreshLayout.setRefreshing(false);
+
                 //Sync SERVER with local database
                 for (int i = 0; i < categoryList.size(); i++) {
                     if (!db.isExist(categoryList.get(i).getId())) {
@@ -95,7 +111,25 @@ public class CategoryFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
+                        .setTitle("Server not responding")
+                        .setMessage("Check your connection and try again")
+                        .setCancelable(false)
+                        .setIcon(R.drawable.ic_baseline_wifi_off_24)
+                        .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                getCategory();
+                            }
+                        })
+                        .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                getActivity().finish();
+                            }
+                        });
+                AlertDialog dialog = dialogBuilder.create();
+                dialog.show();
             }
         }){
             @Override

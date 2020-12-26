@@ -1,34 +1,31 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="@string/messages_header">
+    <PreferenceCategory app:title="Appearance">
 
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
-
-        <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
-            app:useSimpleSummaryProvider="true" />
+        <SwitchPreferenceCompat
+            app:key="dark"
+            app:title="Dark Theme"/>
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/sync_header">
+    <PreferenceCategory app:title="Notification">
 
         <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
+            app:key="notification"
+            app:title="Enable Notification" />
 
-        <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
+        <CheckBoxPreference
+            app:dependency="notification"
+            app:key="wallpaper_notify"
+            app:title="New Wallpaper"
+            app:summary="When new wallpaper added.notify me"/>
+
+        <CheckBoxPreference
+            app:dependency="notification"
+            app:key="category_notify"
+            app:title="New Category"
+            app:summary="When new category added.notify me"/>
+
 
     </PreferenceCategory>
 
