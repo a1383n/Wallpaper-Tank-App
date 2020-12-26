@@ -14,17 +14,19 @@
             app:key="notification"
             app:title="Enable Notification" />
 
-        <CheckBoxPreference
+        <ir.amirsobhan.wallpaperapp.CustomCheckBoxPreference
             app:dependency="notification"
             app:key="wallpaper_notify"
             app:title="New Wallpaper"
-            app:summary="When new wallpaper added.notify me"/>
+            app:summary="When new wallpaper added.notify me"
+            app:summaryColor="?attr/textColor"/>
 
-        <CheckBoxPreference
+        <ir.amirsobhan.wallpaperapp.CustomCheckBoxPreference
             app:dependency="notification"
             app:key="category_notify"
             app:title="New Category"
-            app:summary="When new category added.notify me"/>
+            app:summary="When new category added.notify me"
+            app:summaryColor="?attr/textColor" />
 
 
     </PreferenceCategory>

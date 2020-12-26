@@ -148,6 +148,9 @@ public class HomeFragment extends Fragment {
                         navigationView.getOrCreateBadge(R.id.menu_home).setNumber(navigationView.getOrCreateBadge(R.id.menu_home).getNumber()+1);
                     }
                 }
+                Snackbar snackbar = Snackbar.make(getView(),"text",Snackbar.LENGTH_SHORT);
+                snackbar.setAnchorView(getActivity().findViewById(R.id.bottom_navigation));
+                snackbar.show();
             }
         }, new Response.ErrorListener() {
             @Override
