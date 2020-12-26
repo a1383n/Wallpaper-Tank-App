@@ -122,4 +122,40 @@ class Wallpaper
             $this->conn->runQuery("UPDATE `$this->table_name` SET `likes` = '$like' WHERE `$this->table_name`.`id` =" . $id);
         }
     }
+    
+    /**
+     * Add new Like
+     * @param $id
+     */
+    public function newLike($id)
+    {
+        $sql = "SELECT * FROM " . $this->table_name . " WHERE id=" . $id;
+        $result = $this->conn->runQuery($sql);
+        if (mysqli_num_rows($result) > 0) {
+            $like = 0;
+            while ($row = mysqli_fetch_array($result)) {
+                $like = $row['likes'];
+            }
+            $like += 1;
+            $this->conn->runQuery("UPDATE `$this->table_name` SET `likes` = '$like' WHERE `$this->table_name`.`id` =" . $id);
+        }
+    }
+
+    /**
+     * Remove previous like
+     * @param $id
+     */
+    public function removeLike($id)
+    {
+        $sql = "SELECT * FROM " . $this->table_name . " WHERE id=" . $id;
+        $result = $this->conn->runQuery($sql);
+        if (mysqli_num_rows($result) > 0) {
+            $like = 0;
+            while ($row = mysqli_fetch_array($result)) {
+                $like = $row['likes'];
+            }
+            $like -= 1;
+            $this->conn->runQuery("UPDATE `$this->table_name` SET `likes` = '$like' WHERE `$this->table_name`.`id` =" . $id);
+        }
+    }
 }
