@@ -157,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "Firebase Reg Id is not received yet!");
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
