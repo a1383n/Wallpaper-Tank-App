@@ -16,6 +16,7 @@ header("Content-Type: application/json; charset=UTF-8");
 $action = @$_GET['action'];
 $wallpaper = new Wallpaper(new DB());
 $category = new Category(new DB());
+$registration_ids = new RegistrationID(new DB());
 
 if (isset($action)) {
     switch ($action) {
@@ -31,6 +32,10 @@ if (isset($action)) {
         case "getCategory":
             include "action/getCategory.php";
             break;
+        case "newToken":
+            include "action/newToken.php";
+            break;
+
         default:
             http_response_code(404);
             print_message(false, 404);
