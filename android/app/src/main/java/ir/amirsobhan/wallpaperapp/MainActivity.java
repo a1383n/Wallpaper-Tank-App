@@ -128,8 +128,6 @@ public class MainActivity extends AppCompatActivity {
                     // now subscribe to `global` topic to receive app wide notifications
                     FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
 
-                    displayFirebaseRegId();
-
                 } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
@@ -139,24 +137,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-
-        displayFirebaseRegId();
     }
-
-    // Fetches reg id from shared preferences
-    // and displays on the screen
-    private void displayFirebaseRegId() {
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
-        String regId = pref.getString("regId", null);
-
-        Log.e(TAG, "Firebase reg id: " + regId);
-
-        if (!TextUtils.isEmpty(regId))
-            Log.d(TAG, "Firebase Reg Id: " + regId);
-        else
-            Log.d(TAG, "Firebase Reg Id is not received yet!");
-    }
-
 
     @Override
     protected void onResume() {
