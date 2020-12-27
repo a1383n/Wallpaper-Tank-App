@@ -2,7 +2,6 @@ package ir.amirsobhan.wallpaperapp.Firebase;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -152,13 +151,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void sendRegistrationToServer(final String token) {
         // sending gcm token to server
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        String url;
-        if (Build.VERSION.SDK_INT  <= Build.VERSION_CODES.LOLLIPOP) {
-            url = "http://amirsobhan.ir/wallpaper/api/web/newToken";
-        }else{
-            url = "https://amirsobhan.ir/wallpaper/api/web/newToken";
-        }
-
+        String url = "https://amirsobhan.ir/wallpaper/api/web/newToken";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

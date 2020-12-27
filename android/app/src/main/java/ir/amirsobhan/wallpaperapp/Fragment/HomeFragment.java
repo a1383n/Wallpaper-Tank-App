@@ -2,13 +2,9 @@ package ir.amirsobhan.wallpaperapp.Fragment;
 
 import android.content.DialogInterface;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -16,13 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -33,7 +26,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -46,7 +38,6 @@ import java.util.List;
 import java.util.Map;
 
 import ir.amirsobhan.wallpaperapp.Adapter.WallpaperAdapter;
-import ir.amirsobhan.wallpaperapp.BottomNavigationBehavior;
 import ir.amirsobhan.wallpaperapp.Databases.WallpaperDB;
 import ir.amirsobhan.wallpaperapp.Model.Wallpaper;
 import ir.amirsobhan.wallpaperapp.R;
@@ -112,14 +103,7 @@ public class HomeFragment extends Fragment {
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(getContext());
-
-        String url;
-
-        if (Build.VERSION.SDK_INT  <= Build.VERSION_CODES.LOLLIPOP) {
-            url = "http://amirsobhan.ir/wallpaper/api/web/getWallpapers";
-        }else{
-             url = "https://amirsobhan.ir/wallpaper/api/web/getWallpapers";
-        }
+        String url = "https://amirsobhan.ir/wallpaper/api/web/getWallpapers";
 
         // New string Request
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -155,9 +139,6 @@ public class HomeFragment extends Fragment {
                         navigationView.getOrCreateBadge(R.id.menu_home).setNumber(navigationView.getOrCreateBadge(R.id.menu_home).getNumber()+1);
                     }
                 }
-                Snackbar snackbar = Snackbar.make(getView(),"text",Snackbar.LENGTH_SHORT);
-                snackbar.setAnchorView(getActivity().findViewById(R.id.bottom_navigation));
-                snackbar.show();
             }
         }, new Response.ErrorListener() {
             @Override

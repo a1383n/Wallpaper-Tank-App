@@ -2,12 +2,9 @@ package ir.amirsobhan.wallpaperapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
@@ -16,9 +13,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -29,9 +25,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import ir.amirsobhan.wallpaperapp.Adapter.MainViewPagerAdapter;
 import ir.amirsobhan.wallpaperapp.Firebase.Config;
 import ir.amirsobhan.wallpaperapp.Firebase.NotificationUtils;
-import ir.amirsobhan.wallpaperapp.Fragment.CategoryFragment;
-import ir.amirsobhan.wallpaperapp.Fragment.HomeFragment;
-import ir.amirsobhan.wallpaperapp.Fragment.SettingsFragment;
+import ir.amirsobhan.wallpaperapp.UI.BottomNavigationBehavior;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigationView;
@@ -40,14 +34,28 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private FirebaseAnalytics mFirebaseAnalytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (preferences.getBoolean("dark", false)) {
-            setTheme(R.style.DarkTheme);
-        } else {
-            setTheme(R.style.AppTheme);
+        switch (preferences.getString("theme", "Light")) {
+            case "Light":
+                setTheme(R.style.AppTheme);
+                break;
+            case "Dark":
+                setTheme(R.style.DarkTheme);
+                break;
+            case "System Default":
+                switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+                    case Configuration.UI_MODE_NIGHT_YES:
+                        setTheme(R.style.DarkTheme);
+                        break;
+                    case Configuration.UI_MODE_NIGHT_NO:
+                        setTheme(R.style.AppTheme);
+                        break;
+                }
+                break;
         }
 
         setContentView(R.layout.activity_main);

@@ -1,32 +1,36 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory app:title="Appearance">
+    <PreferenceCategory app:title="Appearance" app:icon="@drawable/ic_baseline_palette_24">
 
-        <SwitchPreferenceCompat
-            app:key="dark"
-            app:title="Dark Theme"/>
+        <ir.amirsobhan.wallpaperapp.UI.CustomListPreference
+            app:key="theme"
+            app:title="Theme"
+            app:summary="Light"
+            android:entries="@array/theme_title"
+            app:entryValues="@array/theme_title"
+            app:summaryColor="?attr/textColor"/>
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Notification">
+    <PreferenceCategory app:title="Notification" app:icon="@drawable/ic_baseline_notifications_24">
 
         <SwitchPreferenceCompat
             app:key="notification"
             app:title="Enable Notification" />
 
-        <ir.amirsobhan.wallpaperapp.CustomCheckBoxPreference
+        <ir.amirsobhan.wallpaperapp.UI.CustomCheckBoxPreference
             app:dependency="notification"
             app:key="wallpaper_notify"
             app:title="New Wallpaper"
-            app:summary="When new wallpaper added.notify me"
+            app:summary="Notify me when new wallpaper added"
             app:summaryColor="?attr/textColor"/>
 
-        <ir.amirsobhan.wallpaperapp.CustomCheckBoxPreference
+        <ir.amirsobhan.wallpaperapp.UI.CustomCheckBoxPreference
             app:dependency="notification"
             app:key="category_notify"
             app:title="New Category"
-            app:summary="When new category added.notify me"
+            app:summary="Notify me when new category added"
             app:summaryColor="?attr/textColor" />
 
 

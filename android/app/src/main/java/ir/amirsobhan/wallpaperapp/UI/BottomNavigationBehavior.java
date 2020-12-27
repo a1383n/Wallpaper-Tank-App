@@ -1,4 +1,4 @@
-package ir.amirsobhan.wallpaperapp;
+package ir.amirsobhan.wallpaperapp.UI;
 
 import android.content.Context;
 import android.util.AttributeSet;

@@ -1,6 +1,7 @@
 package ir.amirsobhan.wallpaperapp.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Build;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 import ir.amirsobhan.wallpaperapp.Databases.WallpaperDB;
+import ir.amirsobhan.wallpaperapp.FullscreenViewActivity;
 import ir.amirsobhan.wallpaperapp.Model.ApiResult;
 import ir.amirsobhan.wallpaperapp.Model.Wallpaper;
 import ir.amirsobhan.wallpaperapp.R;
@@ -115,17 +117,18 @@ public class WallpaperAdapter extends RecyclerView.Adapter<WallpaperAdapter.Wall
                 }
             });
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(context, FullscreenViewActivity.class));
+            }
+        });
     }
 
     private boolean newLike(final int id) {
         RequestQueue queue = Volley.newRequestQueue(context);
-        String url;
-
-        if (Build.VERSION.SDK_INT  <= Build.VERSION_CODES.LOLLIPOP) {
-            url = "http://amirsobhan.ir/wallpaper/api/web/newLike";
-        }else{
-            url = "https://amirsobhan.ir/wallpaper/api/web/newLike";
-        }
+        final String url = "https://amirsobhan.ir/wallpaper/api/web/newLike";
 
         // sync this action with database
         db.setLike(id, true);
@@ -133,6 +136,7 @@ public class WallpaperAdapter extends RecyclerView.Adapter<WallpaperAdapter.Wall
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.d("Action Url",url);
 
                 //Initialization GSON
                 GsonBuilder gsonBuilder = new GsonBuilder();
@@ -179,19 +183,15 @@ public class WallpaperAdapter extends RecyclerView.Adapter<WallpaperAdapter.Wall
 
     private boolean removeLike(final int id) {
         RequestQueue queue = Volley.newRequestQueue(context);
-        String url;
+        final String url = "https://amirsobhan.ir/wallpaper/api/web/removeLike";
 
-        if (Build.VERSION.SDK_INT  <= Build.VERSION_CODES.LOLLIPOP) {
-            url = "http://amirsobhan.ir/wallpaper/api/web/removeLike";
-        }else{
-            url = "https://amirsobhan.ir/wallpaper/api/web/removeLike";
-        }
         // sync this action with database
         db.setLike(id, false);
 
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.d("Action Url",url);
 
                 //Initialization GSON
                 GsonBuilder gsonBuilder = new GsonBuilder();
