@@ -2,6 +2,7 @@ package ir.amirsobhan.wallpaperapp.Fragment;
 
 import android.content.DialogInterface;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -112,7 +113,13 @@ public class HomeFragment extends Fragment {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(getContext());
 
-        String url = "https://amirsobhan.ir/wallpaper/api/web/getWallpapers";
+        String url;
+
+        if (Build.VERSION.SDK_INT  <= Build.VERSION_CODES.LOLLIPOP) {
+            url = "http://amirsobhan.ir/wallpaper/api/web/getWallpapers";
+        }else{
+             url = "https://amirsobhan.ir/wallpaper/api/web/getWallpapers";
+        }
 
         // New string Request
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {

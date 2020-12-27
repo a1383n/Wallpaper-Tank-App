@@ -2,16 +2,28 @@ package ir.amirsobhan.wallpaperapp.Firebase;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import ir.amirsobhan.wallpaperapp.MainActivity;
 
@@ -20,6 +32,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = MyFirebaseMessagingService.class.getSimpleName();
 
     private NotificationUtils notificationUtils;
+
+    @Override
+    public void onNewToken(@NonNull String s) {
+        super.onNewToken(s);
+        sendRegistrationToServer(s);
+
+    }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -129,4 +148,46 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         notificationUtils.showNotificationMessage(title, message, timeStamp, intent, imageUrl);
     }
+
+    private void sendRegistrationToServer(final String token) {
+        // sending gcm token to server
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        String url;
+        if (Build.VERSION.SDK_INT  <= Build.VERSION_CODES.LOLLIPOP) {
+            url = "http://amirsobhan.ir/wallpaper/api/web/newToken";
+        }else{
+            url = "https://amirsobhan.ir/wallpaper/api/web/newToken";
+        }
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                //Send Authentication in header
+                params.put("Authentication", "123456789");
+
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("token", token);
+
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+    }
+
 }

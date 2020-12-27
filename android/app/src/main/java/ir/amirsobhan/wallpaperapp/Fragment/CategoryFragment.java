@@ -1,6 +1,7 @@
 package ir.amirsobhan.wallpaperapp.Fragment;
 
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -76,7 +77,13 @@ public class CategoryFragment extends Fragment {
         recyclerView.setVisibility(View.GONE);
 
         final RequestQueue queue = Volley.newRequestQueue(getContext());
-        String url = "https://amirsobhan.ir/wallpaper/api/web/getCategory";
+        String url;
+
+        if (Build.VERSION.SDK_INT  <= Build.VERSION_CODES.LOLLIPOP) {
+            url = "http://amirsobhan.ir/wallpaper/api/web/getCategory";
+        }else{
+            url = "https://amirsobhan.ir/wallpaper/api/web/getCategory";
+        }
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

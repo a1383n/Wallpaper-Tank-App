@@ -119,7 +119,13 @@ public class WallpaperAdapter extends RecyclerView.Adapter<WallpaperAdapter.Wall
 
     private boolean newLike(final int id) {
         RequestQueue queue = Volley.newRequestQueue(context);
-        final String url = "https://amirsobhan.ir/wallpaper/api/web/newLike";
+        String url;
+
+        if (Build.VERSION.SDK_INT  <= Build.VERSION_CODES.LOLLIPOP) {
+            url = "http://amirsobhan.ir/wallpaper/api/web/newLike";
+        }else{
+            url = "https://amirsobhan.ir/wallpaper/api/web/newLike";
+        }
 
         // sync this action with database
         db.setLike(id, true);
@@ -127,7 +133,6 @@ public class WallpaperAdapter extends RecyclerView.Adapter<WallpaperAdapter.Wall
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("Action Url",url);
 
                 //Initialization GSON
                 GsonBuilder gsonBuilder = new GsonBuilder();
@@ -174,15 +179,19 @@ public class WallpaperAdapter extends RecyclerView.Adapter<WallpaperAdapter.Wall
 
     private boolean removeLike(final int id) {
         RequestQueue queue = Volley.newRequestQueue(context);
-        final String url = "https://amirsobhan.ir/wallpaper/api/web/removeLike";
+        String url;
 
+        if (Build.VERSION.SDK_INT  <= Build.VERSION_CODES.LOLLIPOP) {
+            url = "http://amirsobhan.ir/wallpaper/api/web/removeLike";
+        }else{
+            url = "https://amirsobhan.ir/wallpaper/api/web/removeLike";
+        }
         // sync this action with database
         db.setLike(id, false);
 
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("Action Url",url);
 
                 //Initialization GSON
                 GsonBuilder gsonBuilder = new GsonBuilder();

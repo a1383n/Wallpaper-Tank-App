@@ -3,6 +3,7 @@
     package="ir.amirsobhan.wallpaperapp">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
 
     <application
         android:allowBackup="true"
