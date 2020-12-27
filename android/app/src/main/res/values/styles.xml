@@ -7,19 +7,18 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="app_background">#FFFFFF</item>
         <item name="item_background">@color/colorPrimary</item>
-        <item name="nav_icon_color">#FFFFFF</item>
         <item name="textColor">#000000</item>
+
     </style>
 
     <!-- Dark application theme. -->
-    <style name="DarkTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="DarkTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#212121</item>
         <item name="colorPrimaryDark">#000000</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="app_background">#212121</item>
         <item name="item_background">#333333</item>
-        <item name="nav_icon_color">#FFFFFF</item>
         <item name="android:textColorPrimary">#FFFFFF</item>
         <item name="android:navigationBarColor" tools:targetApi="lollipop">#000000</item>
         <item name="textColor">#FFFFFF</item>
