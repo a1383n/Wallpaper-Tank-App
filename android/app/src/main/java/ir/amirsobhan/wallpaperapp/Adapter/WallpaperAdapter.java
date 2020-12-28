@@ -121,7 +121,9 @@ public class WallpaperAdapter extends RecyclerView.Adapter<WallpaperAdapter.Wall
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, FullscreenViewActivity.class));
+                Intent intent = new Intent(context,FullscreenViewActivity.class);
+                intent.putExtra("json",new Gson().toJson(wallpaper));
+                context.startActivity(intent);
             }
         });
     }
