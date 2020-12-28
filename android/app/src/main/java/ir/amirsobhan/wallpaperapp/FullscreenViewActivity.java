@@ -2,16 +2,13 @@ package ir.amirsobhan.wallpaperapp;
 
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -22,12 +19,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.preference.PreferenceManager;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.NetworkImageView;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -37,29 +28,32 @@ import com.bumptech.glide.request.target.Target;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 import ir.amirsobhan.wallpaperapp.Model.Wallpaper;
 
 public class FullscreenViewActivity extends AppCompatActivity {
-
     private final String TAG = this.getClass().getSimpleName();
     private Wallpaper wallpaper;
-    private ImageView imageView,backBtn;
+    private ImageView imageView, backBtn;
     private ProgressBar progressBar;
-    private TextView toolbar_title,sheetTitle,sheetCategory;
+    private TextView toolbar_title, sheetTitle, sheetCategory,sheetViews,sheetDownloads;
     private ConstraintLayout constraintLayout;
     private BottomSheetBehavior sheetBehavior;
     private ChipGroup chipGroup;
+    private boolean isFullScreen = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         applyTheme();
         setContentView(R.layout.activity_fullscreen_view);
+
         Initialization();
         // Set toolbar title as wallpaper title
         toolbar_title.setText(wallpaper.getTitle());
@@ -67,6 +61,8 @@ public class FullscreenViewActivity extends AppCompatActivity {
         //Set bottomSheet textViews values
         sheetTitle.setText(wallpaper.getTitle());
         sheetCategory.setText(wallpaper.getCategory());
+        sheetViews.setText(wallpaper.getViews()+"");
+        sheetDownloads.setText(wallpaper.getDownloads()+"");
 
         //Set source wallpaper
         Glide.with(this).load(wallpaper.getWallpaper())
@@ -80,6 +76,7 @@ public class FullscreenViewActivity extends AppCompatActivity {
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         progressBar.setVisibility(View.GONE);
+                        constraintLayout.setVisibility(View.VISIBLE);
                         return false;
                     }
                 })
@@ -87,25 +84,21 @@ public class FullscreenViewActivity extends AppCompatActivity {
 
         //set chips
         String[] tag_array = wallpaper.getTags().split(",");
-        for (int i = 0; i < tag_array.length; i++){
+        for (int i = 0; i < tag_array.length; i++) {
             Chip chip = new Chip(this);
             chip.setText(tag_array[i]);
-            chipGroup.addView(chip,i);
-        }
-
-        //Check tags length
-        //if tags length above 6, bottomSheet draggable set to false
-        if(tag_array.length >= 6){
-            sheetBehavior.setDraggable(false);
+            chipGroup.addView(chip, i);
         }
     }
-    private void Initialization(){
+
+    private void Initialization() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
 
-        Type type = new TypeToken<Wallpaper>() {}.getType();
-        wallpaper = new Gson().fromJson(getIntent().getStringExtra("json"),type);
+        Type type = new TypeToken<Wallpaper>() {
+        }.getType();
+        wallpaper = new Gson().fromJson(getIntent().getStringExtra("json"), type);
 
         constraintLayout = findViewById(R.id.full_info_layout);
         sheetBehavior = BottomSheetBehavior.from(constraintLayout);
@@ -116,6 +109,9 @@ public class FullscreenViewActivity extends AppCompatActivity {
         sheetTitle = findViewById(R.id.full_sheet_title);
         sheetCategory = findViewById(R.id.full_sheet_category);
         chipGroup = findViewById(R.id.chipGroup);
+        sheetViews = findViewById(R.id.textView);
+        sheetDownloads = findViewById(R.id.textView2);
+
 
         //Back btn action
         backBtn.setOnClickListener(new View.OnClickListener() {
@@ -135,7 +131,7 @@ public class FullscreenViewActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
+                if (sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                     sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }
             }
@@ -143,7 +139,7 @@ public class FullscreenViewActivity extends AppCompatActivity {
 
     }
 
-    private void applyTheme(){
+    private void applyTheme() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         switch (preferences.getString("theme", "Light")) {
             case "Light":
@@ -182,52 +178,58 @@ public class FullscreenViewActivity extends AppCompatActivity {
             Log.i(TAG, "Turning immersive mode mode on.");
         }
 
-        // Navigation bar hiding:  Backwards compatible to ICS.
-        if (Build.VERSION.SDK_INT >= 14) {
-            newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        }
-
-        // Status bar hiding: Backwards compatible to Jellybean
-        if (Build.VERSION.SDK_INT >= 16) {
-            newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
-        }
-
-        // Immersive mode: Backward compatible to KitKat.
-        // Note that this flag doesn't do anything by itself, it only augments the behavior
-        // of HIDE_NAVIGATION and FLAG_FULLSCREEN.  For the purposes of this sample
-        // all three flags are being toggled together.
-        // Note that there are two immersive mode UI flags, one of which is referred to as "sticky".
-        // Sticky immersive mode differs in that it makes the navigation and status bars
-        // semi-transparent, and the UI flag does not get cleared when the user interacts with
-        // the screen.
-        if (Build.VERSION.SDK_INT >= 18) {
-            newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        }
+        newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
+        newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 
         getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
         //END_INCLUDE (set_ui_flags)
+
+        isFullScreen = true;
+        getSupportActionBar().hide();
+
+        constraintLayout.setVisibility(View.GONE);
+
     }
 
+    public void exitFullScreen(){
+        getWindow().getDecorView().setSystemUiVisibility(View.VISIBLE);
+        getSupportActionBar().show();
+        constraintLayout.setVisibility(View.VISIBLE);
+        isFullScreen = false;
+    }
     @Override
     public void onBackPressed() {
-        if (sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
-            sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        }else {
-            super.onBackPressed();
+        if (!isFullScreen) {
+            if (sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            } else {
+                super.onBackPressed();
+            }
+        } else {
+            exitFullScreen();
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.full_menu,menu);
+        getMenuInflater().inflate(R.menu.full_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.go_fullscreen:
-//                fullScreen();
+                fullScreen();
+                Snackbar.make(imageView,"To exit fullscreen.Press back button", BaseTransientBottomBar.LENGTH_INDEFINITE)
+                        .setAction("Exit Now", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                exitFullScreen();
+                            }
+                        })
+                        .show();
                 break;
         }
 
