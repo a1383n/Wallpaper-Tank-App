@@ -11,6 +11,9 @@ public class Wallpaper {
     @SerializedName("title")
     @Expose
     private String title;
+    @SerializedName("category")
+    @Expose
+    private String category;
     @SerializedName("tags")
     @Expose
     private String tags;
@@ -36,9 +39,10 @@ public class Wallpaper {
     @Expose
     private String wallpaper;
 
-    public Wallpaper(int id, String title, String tags, int likes, int views, int downloads, String author, String path, String temp, String wallpaper) {
+    public Wallpaper(int id, String title, String category, String tags, int likes, int views, int downloads, String author, String path, String temp, String wallpaper) {
         this.id = id;
         this.title = title;
+        this.category = category;
         this.tags = tags;
         this.likes = likes;
         this.views = views;
@@ -49,8 +53,9 @@ public class Wallpaper {
         this.wallpaper = wallpaper;
     }
 
-    public Wallpaper(String title, String tags, int likes, int views, int downloads, String author, String path, String temp, String wallpaper) {
+    public Wallpaper(String title, String category, String tags, int likes, int views, int downloads, String author, String path, String temp, String wallpaper) {
         this.title = title;
+        this.category = category;
         this.tags = tags;
         this.likes = likes;
         this.views = views;
@@ -141,4 +146,11 @@ public class Wallpaper {
         this.wallpaper = wallpaper;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 }
