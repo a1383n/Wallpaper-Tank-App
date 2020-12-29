@@ -47,17 +47,22 @@ class Wallpaper
 
     /**
      * @param int $id
+     * @param null $category
      * @return array
      */
-    public function Select($id = 0)
+    public function Select($id = 0,$category = null)
     {
         $id = mysqli_escape_string($this->conn->getConnection(), $id);
+        $category = mysqli_escape_string($this->conn->getConnection(), $category);
 
         if ($id > 0) {
             $sql = "SELECT * FROM " . $this->table_name . " WHERE id=" . $id . " ORDER BY `$this->table_name`.`id`  DESC";
+        }elseif ($category != null){
+            $sql = "SELECT * FROM " . $this->table_name . " WHERE category='" . $category . "' ORDER BY `$this->table_name`.`id`  DESC";
         } else {
             $sql = "SELECT * FROM " . $this->table_name . " ORDER BY `$this->table_name`.`id`  DESC";
         }
+        echo $sql;
         $result = $this->conn->runQuery($sql);
         $array = array();
         if (mysqli_num_rows($result) > 0) {
