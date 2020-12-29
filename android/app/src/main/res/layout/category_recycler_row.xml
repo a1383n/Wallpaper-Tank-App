@@ -39,7 +39,6 @@
                     android:id="@+id/category_row_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/textview"
                     android:fontFamily="@font/open_sans_bold"
                     android:textSize="20sp"
                     android:textColor="#FFF"
