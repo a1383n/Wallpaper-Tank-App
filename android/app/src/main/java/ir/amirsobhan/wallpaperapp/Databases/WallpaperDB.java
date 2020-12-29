@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
 import ir.amirsobhan.wallpaperapp.Model.Wallpaper;
 
 public class WallpaperDB extends SQLiteOpenHelper {
@@ -78,7 +76,7 @@ public class WallpaperDB extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String sql = "SELECT * FROM " + TABLE_NAME + " WHERE " + KEY_ID + "=" + id;
         Cursor cursor = db.rawQuery(sql, null, null);
-        return (cursor.getCount() > 0) ? true : false;
+        return cursor.getCount() > 0;
     }
 
     /**

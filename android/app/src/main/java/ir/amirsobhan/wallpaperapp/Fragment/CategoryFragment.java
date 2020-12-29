@@ -1,18 +1,19 @@
 package ir.amirsobhan.wallpaperapp.Fragment;
 
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -34,10 +35,8 @@ import java.util.List;
 import java.util.Map;
 
 import ir.amirsobhan.wallpaperapp.Adapter.CategoryAdapter;
-import ir.amirsobhan.wallpaperapp.Adapter.WallpaperAdapter;
 import ir.amirsobhan.wallpaperapp.Databases.CategoryDB;
 import ir.amirsobhan.wallpaperapp.Model.Category;
-import ir.amirsobhan.wallpaperapp.Model.Wallpaper;
 import ir.amirsobhan.wallpaperapp.R;
 public class CategoryFragment extends Fragment {
     RecyclerView recyclerView;
@@ -68,8 +67,21 @@ public class CategoryFragment extends Fragment {
 
         db = new CategoryDB(getContext());
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
+        //Setup layoutManager
+        RecyclerView.LayoutManager layoutManager = null;
+
+        // Check device screen size
+        if ((getContext().getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE) {
+            // Large screen device
+            // Show grid
+            layoutManager = new GridLayoutManager(getContext(), 3);
+        } else {
+            // Small and Normal screen size
+            // Show vertical list
+            layoutManager = new GridLayoutManager(getContext(), 2);
+        }
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
     private void getCategory(){

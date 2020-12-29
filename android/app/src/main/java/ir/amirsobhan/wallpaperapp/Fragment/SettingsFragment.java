@@ -14,10 +14,10 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import ir.amirsobhan.wallpaperapp.UI.CustomCheckBoxPreference;
 import ir.amirsobhan.wallpaperapp.Firebase.Config;
 import ir.amirsobhan.wallpaperapp.MainActivity;
 import ir.amirsobhan.wallpaperapp.R;
+import ir.amirsobhan.wallpaperapp.UI.CustomCheckBoxPreference;
 import ir.amirsobhan.wallpaperapp.UI.CustomListPreference;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
@@ -37,7 +37,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 themeList.setSummary((CharSequence) newValue);
-                if (sharedPreferences.getString(themeList.getKey(),"Light") != (String) newValue) {
+                if (sharedPreferences.getString(themeList.getKey(),"Light") != newValue) {
                     Snackbar.make(getView(), "Saved,The app must be restarted to apply the new theme", BaseTransientBottomBar.LENGTH_INDEFINITE)
                             .setAnchorView(getActivity().findViewById(R.id.bottom_navigation))
                             .setAction("Restart", new View.OnClickListener() {
