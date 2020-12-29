@@ -121,6 +121,7 @@ public class WallpaperAdapter extends RecyclerView.Adapter<WallpaperAdapter.Wall
             public void onClick(View v) {
                 Intent intent = new Intent(context, WallpaperSetActivity.class);
                 intent.putExtra("json",new Gson().toJson(wallpaper));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });
