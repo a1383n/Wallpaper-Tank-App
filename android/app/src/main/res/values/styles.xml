@@ -12,7 +12,7 @@
     </style>
 
     <!-- Dark application theme. -->
-    <style name="DarkTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="DarkTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#212121</item>
         <item name="colorPrimaryDark">#000000</item>
