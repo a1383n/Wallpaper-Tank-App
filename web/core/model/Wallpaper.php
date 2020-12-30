@@ -62,7 +62,6 @@ class Wallpaper
         } else {
             $sql = "SELECT * FROM " . $this->table_name . " ORDER BY `$this->table_name`.`id`  DESC";
         }
-        echo $sql;
         $result = $this->conn->runQuery($sql);
         $array = array();
         if (mysqli_num_rows($result) > 0) {

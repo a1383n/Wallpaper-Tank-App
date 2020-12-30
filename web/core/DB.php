@@ -9,10 +9,14 @@ class DB
      */
     public function getConnection(){
         $conn = mysqli_connect(DATABASE_HOST,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME);
-        mysqli_set_charset($conn,"uft8");
+        mysqli_set_charset($conn,"utf8");
         return ($conn) ? $conn : false;
     }
 
+    /**
+     * @param $table
+     * @return bool|mysqli_result
+     */
     public function Select($table){
         $sql = "SELECT * FROM ".$table;
         return mysqli_query($this->getConnection(),$sql);

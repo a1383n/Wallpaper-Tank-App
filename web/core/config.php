@@ -9,4 +9,3 @@ define("DATABASE_PASSWORD","");
 define("DATABASE_NAME","wallpaper");
 
 define("UPLOAD_ROOT",SITE.ROOT_FOLDER."uploads/");
-
