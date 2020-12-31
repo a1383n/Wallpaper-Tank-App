@@ -32,15 +32,15 @@ import java.util.List;
 import java.util.Map;
 
 import ir.amirsobhan.wallpaperapp.Databases.WallpaperDB;
-import ir.amirsobhan.wallpaperapp.WallpaperSetActivity;
 import ir.amirsobhan.wallpaperapp.Model.ApiResult;
 import ir.amirsobhan.wallpaperapp.Model.Wallpaper;
 import ir.amirsobhan.wallpaperapp.R;
+import ir.amirsobhan.wallpaperapp.WallpaperSetActivity;
 
 public class WallpaperAdapter extends RecyclerView.Adapter<WallpaperAdapter.WallpaperViewHolder> {
-    private Context context;
-    private List<Wallpaper> wallpaperList;
-    private WallpaperDB db;
+    private final Context context;
+    private final List<Wallpaper> wallpaperList;
+    private final WallpaperDB db;
     private boolean newLike_ok;
     private boolean removeLike_ok;
 

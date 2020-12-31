@@ -66,6 +66,6 @@ public class CategoryDB extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String sql = "SELECT * FROM " + TABLE_NAME + " WHERE " + KEY_ID + "=" + id;
         Cursor cursor = db.rawQuery(sql, null, null);
-        return (cursor.getCount() > 0) ? true : false;
+        return cursor.getCount() > 0;
     }
 }

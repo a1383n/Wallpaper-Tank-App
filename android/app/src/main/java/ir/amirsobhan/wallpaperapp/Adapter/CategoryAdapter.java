@@ -20,8 +20,8 @@ import ir.amirsobhan.wallpaperapp.Model.Category;
 import ir.amirsobhan.wallpaperapp.R;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
-    private Context context;
-    private List<Category> categoryList;
+    private final Context context;
+    private final List<Category> categoryList;
 
     public CategoryAdapter(Context context, List<Category> categoryList) {
         this.context = context;

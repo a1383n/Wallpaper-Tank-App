@@ -66,7 +66,7 @@ public class WallpaperSetActivity extends AppCompatActivity {
     private Snackbar snackbar;
     private AlertDialog alertDialog;
     private MaterialAlertDialogBuilder setDialog;
-    private String[] setDialogListItem = new String[]{"Home Screen", "Lock Screen", "Both", "Save to gallery"};
+    private final String[] setDialogListItem = new String[]{"Home Screen", "Lock Screen", "Both", "Save to gallery"};
     private int setDialogListSelect = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
