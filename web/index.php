@@ -1,28 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Home | Panel</title>
     <link type="text/css" rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="assets/plugins/dataTables/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: #f1f1f1;
-        }
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
-        .content-box {
-            margin-top: 25px;
-            margin-bottom: 25px;
-            padding: 25px;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-            transition: 0.3s;
-            border-radius: 5px; /* 5px rounded corners */
-            background: #ffffff;
-        }
-    </style>
 </head>
 <body>
 <div class="container content-box">
@@ -48,7 +36,6 @@
         </table>
     </div>
 </div>
-
 <script src="assets/js/jquery-3.5.1.min.js"></script>
 <script src="assets/js/bootstrap.min.js"></script>
 <script src="assets/js/bootstrap.bundle.js"></script>
