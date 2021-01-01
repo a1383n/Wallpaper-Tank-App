@@ -26,10 +26,11 @@ $login_failure = '
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="../assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../assets/plugins/dataTables/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="../assets/js/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+    <script src="../assets/jquery/jquery.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -43,7 +44,7 @@ $login_failure = '
                         <input type="text" name="username" class="form-control" id="login-form-username-input" required>
                     </div>
                     <div class="form-group">
-                        <label for="login-form-username-input">Password</label>
+                        <label for="login-form-password-input">Password</label>
                         <input type="password" name="password" class="form-control" id="login-form-password-input"
                                required>
                     </div>
@@ -93,7 +94,6 @@ $login_failure = '
         </div>
     </div>
 </div>
-<script src="../assets/js/bootstrap.min.js"></script>
-<script src="../assets/js/bootstrap.bundle.js"></script>
+<script src="../assets/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

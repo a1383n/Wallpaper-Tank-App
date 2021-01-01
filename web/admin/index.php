@@ -1,13 +1,19 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . "/core/autoloader.php";
-session_start();
-$security = new Security();
-if (!$security->isLogin($_SESSION,$_SERVER,$_COOKIE)) {
-    header("Location: login.php");
-}
+    session_start();
+    require_once $_SERVER['DOCUMENT_ROOT']."/core/autoloader.php";
+    $security = new Security();
+    if (!$security->isLogin($_SESSION,$_COOKIE,$_SERVER)){
+        header("Location: login.php");
+    }
+?>
+<!DOCTYPE html>
+<html lang="en">
+<?php include "ui/header.php"; ?>
+<body>
+<?php include "ui/sidebar.php"; ?>
 
-//setcookie("remember_me",$security->rememberMeCookieValue("username","127.0.0.1","email"),time()+3600);
+<?php include "ui/content.php";?>
 
-$value = $security->validationRememberMeCookie($_COOKIE['remember_me'], $_SERVER['REMOTE_ADDR']);
-
-var_dump($value);
+<?php include "ui/footer.php"; ?>
+</body>
+</html>
