@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Home | Panel</title>
-    <link type="text/css" rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="assets/plugins/dataTables/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
@@ -36,9 +36,8 @@
         </table>
     </div>
 </div>
-<script src="assets/js/jquery-3.5.1.min.js"></script>
-<script src="assets/js/bootstrap.min.js"></script>
-<script src="assets/js/bootstrap.bundle.js"></script>
+<script src="assets/jquery/jquery.min.js"></script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
 <script src="assets/plugins/dataTables/dataTables.bootstrap4.js"></script>
 <script src="assets/js/functions.js"></script>

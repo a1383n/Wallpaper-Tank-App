@@ -1,7 +1,9 @@
 <?php
 session_start();
-if (isset($_SESSION['isLogin']) && $_SESSION['isLogin'] == true){
-    header("Location: panel.php");
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/autoloader.php";
+$security = new Security();
+if ($security->isLogin($_SESSION,$_SERVER,$_COOKIE)){
+    header("Location: index.php");
 }
 
 $login_successful = '
@@ -24,10 +26,11 @@ $login_failure = '
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="../assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../assets/plugins/dataTables/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="../assets/js/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+    <script src="../assets/jquery/jquery.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -41,7 +44,7 @@ $login_failure = '
                         <input type="text" name="username" class="form-control" id="login-form-username-input" required>
                     </div>
                     <div class="form-group">
-                        <label for="login-form-username-input">Password</label>
+                        <label for="login-form-password-input">Password</label>
                         <input type="password" name="password" class="form-control" id="login-form-password-input"
                                required>
                     </div>
@@ -57,7 +60,6 @@ $login_failure = '
                     </div>
                     <?php
                     if (isset($_POST['username']) && isset($_POST['password'])) {
-                        require_once $_SERVER['DOCUMENT_ROOT'] . "/core/autoloader.php";
                         $username = $_POST['username'];
                         $password = $_POST['password'];
                         $users = new Users(new DB());
@@ -68,7 +70,7 @@ $login_failure = '
                             $_SESSION['email'] = $result['email'];
 
                             if (isset($_POST['remember_me']) == true){
-
+                                setcookie("remember_me",$security->rememberMeCookieValue($username,$_SERVER['REMOTE_ADDR']),time()+3600);
                             }
 
                             echo $login_successful;
@@ -92,7 +94,6 @@ $login_failure = '
         </div>
     </div>
 </div>
-<script src="../assets/js/bootstrap.min.js"></script>
-<script src="../assets/js/bootstrap.bundle.js"></script>
+<script src="../assets/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
