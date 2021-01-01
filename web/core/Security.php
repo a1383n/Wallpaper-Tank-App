@@ -44,7 +44,8 @@ class Security
      * @param string $string
      * @return false|string
      */
-    public function encryptionString(string $string){
+    public function encryptionString(string $string)
+    {
         return openssl_encrypt($string,
             $this->ciphering,
             $this->encryption_key,
@@ -57,12 +58,13 @@ class Security
      * @param string $encrypted_string
      * @return false|string
      */
-    public function decryptionString(string $encrypted_string){
+    public function decryptionString(string $encrypted_string)
+    {
         return openssl_decrypt($encrypted_string,
-        $this->ciphering,
-        $this->encryption_key,
-        $this->option,
-        $this->encryption_iv);
+            $this->ciphering,
+            $this->encryption_key,
+            $this->option,
+            $this->encryption_iv);
     }
 
     /**
@@ -72,11 +74,12 @@ class Security
      * @param $email
      * @return string
      */
-    public function rememberMeCookieValue($username,$ip,$email){
-        $encrypt_string = $ip.":".$username.":".$email.":";
-        $encrypt_string .= time()+3600;
+    public function rememberMeCookieValue($username, $ip)
+    {
+        $encrypt_string = $ip . ":" . $username . ":";
+        $encrypt_string .= time() + 3600;
 
-        return $username.":".$this->encryptionString($encrypt_string);
+        return $username . ":" . $this->encryptionString($encrypt_string);
     }
 
     /**
@@ -85,26 +88,42 @@ class Security
      * @param $ip
      * @return array|false
      */
-    public function validationRememberMeCookie($cookie_value,$ip){
+    public function validationRememberMeCookie($cookie_value, $ip)
+    {
         // Explode cookie value
-        $cookie_array = explode(":",$cookie_value);
+        $cookie_array = explode(":", $cookie_value);
 
         // Store username in cookie value
         $cookie_username = $cookie_array[0];
 
         // Decrypt cookie value and explode
-        $cookie_decrypt = explode(":",$this->decryptionString($cookie_array[1]));
+        $cookie_decrypt = explode(":", $this->decryptionString($cookie_array[1]));
 
         //Check cookie username with decrypt username
-        if ($cookie_username == $cookie_decrypt[1]){
+        if ($cookie_username == $cookie_decrypt[1]) {
             //Check Remote ip with decrypt ip
-            if ($ip == $cookie_decrypt[0]){
-                //Validation success
-                return array("username"=>$cookie_username,"email"=>$cookie_decrypt[2]);
-            }else{
+            if ($ip == $cookie_decrypt[0]) {
+                if ($cookie_decrypt[2] > time()) {
+                    //Validation success
+                    return array("username" => $cookie_username);
+                } else {
+                    return false;
+                }
+            } else {
                 return false;
             }
-        }else{
+        } else {
+            return false;
+        }
+    }
+
+    public function isLogin($session, $server = null, $cookie = null)
+    {
+        if (isset($session['isLogin'])) {
+            return true;
+        } elseif (isset($cookie['remember_me']) && is_array($this->validationRememberMeCookie($cookie['remember_me'], $server['REMOTE_ADDR']))) {
+            return true;
+        } else {
             return false;
         }
     }

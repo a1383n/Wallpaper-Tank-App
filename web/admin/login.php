@@ -1,7 +1,9 @@
 <?php
 session_start();
-if (isset($_SESSION['isLogin']) && $_SESSION['isLogin'] == true){
-    header("Location: panel.php");
+require_once $_SERVER['DOCUMENT_ROOT'] . "/core/autoloader.php";
+$security = new Security();
+if ($security->isLogin($_SESSION,$_SERVER,$_COOKIE)){
+    header("Location: index.php");
 }
 
 $login_successful = '
@@ -57,7 +59,6 @@ $login_failure = '
                     </div>
                     <?php
                     if (isset($_POST['username']) && isset($_POST['password'])) {
-                        require_once $_SERVER['DOCUMENT_ROOT'] . "/core/autoloader.php";
                         $username = $_POST['username'];
                         $password = $_POST['password'];
                         $users = new Users(new DB());
@@ -68,7 +69,7 @@ $login_failure = '
                             $_SESSION['email'] = $result['email'];
 
                             if (isset($_POST['remember_me']) == true){
-
+                                setcookie("remember_me",$security->rememberMeCookieValue($username,$_SERVER['REMOTE_ADDR']),time()+3600);
                             }
 
                             echo $login_successful;
