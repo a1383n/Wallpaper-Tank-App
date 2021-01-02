@@ -1,7 +1,10 @@
-<?php if (isset($_GET['a']) && $_GET['a'] == "wallpaper"):?>
+<?php (!$isLogin) ? header("Location: ../login.php") : null ?>
+
+<?php if (isset($_GET['a']) && $_GET['a'] == "wallpaper"): ?>
     <div class="container content-box">
         <div align="left">
-            <button class="btn btn-primary" data-toggle="modal" data-target="#addModal" id="wallpaper-add-btn">Add
+            <button class="btn btn-primary" data-toggle="modal" data-target="#addModal" id="wallpaper-add-btn"
+                    onclick="addButton()">Add
                 Wallpaper
             </button>
             <br/>
@@ -22,4 +25,76 @@
             </table>
         </div>
     </div>
-<?php endif;?>
+    <div id="addModal" class="modal fade">
+        <div class="modal-dialog">
+            <form method="post" id="add-wallpaper-form" enctype="multipart/form-data">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add Wallpaper</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="add-form-wallpaper-title-input">Title</label>
+                            <input type="text" name="title" id="add-form-wallpaper-title-input" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select class="form-control" id="add-form-wallpaper-category-input">
+                                <option>Category</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="add-form-wallpaper-tags-input">Tags</label>
+                            <div class="input-group">
+                                <input type="text" id="add-form-wallpaper-tags-input" class="form-control">
+                                <div class="input-group-append">
+                                    <button type="button" id="add-form-wallpaper-tags-input-btn"
+                                            class="btn btn-secondary">
+                                        Add
+                                    </button>
+                                </div>
+                            </div>
+                            <label for="add-form-wallpaper-tags-input-btn">After evey tag press Enter</label>
+                            <input type="hidden" id="add-form-wallpaper-tags-array-string"/>
+                        </div>
+                        <div class="form-group">
+                            <div id="add-form-wallpaper-tags-list">
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="add-form-wallpaper-image-input"
+                                       accept="image/jpeg">
+                                <label class="custom-file-label" for="add-form-wallpaper-image-input">Choose
+                                    file</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="wallpaper_id" id="add-form-wallpaper-id-input">
+                        <input type="hidden" name="operation" id="add-form-wallpaper-operation-input">
+                        <input type="submit" class="btn btn-success" name="action" id="add-form-wallpaper-action-input"
+                               value="Add">
+                        <input type="reset" class="btn btn-danger" name="reset" id="add-form-wallpaper-reset-input">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <script>
+            // Add the following code if you want the name of the file appear on select
+            $(".custom-file-input").on("change", function () {
+                const fileName = $(this).val().split("\\").pop();
+                $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+            });
+
+            $("#add-wallpaper-form").on("reset", function () {
+                $(".custom-file-label").removeClass("selected").html("Choose file");
+            });
+
+        </script>
+    </div>
+
+<?php endif; ?>

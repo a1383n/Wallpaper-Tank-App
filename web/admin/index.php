@@ -5,6 +5,7 @@
     if (!$security->isLogin($_SESSION,$_COOKIE,$_SERVER)){
         header("Location: login.php");
     }
+    $isLogin = true;
 ?>
 <!DOCTYPE html>
 <html lang="en">

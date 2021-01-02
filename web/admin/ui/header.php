@@ -1,3 +1,4 @@
+<?php (!$isLogin) ? header("Location: ../login.php") : null?>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -13,4 +14,5 @@
     <!-- dataTable css-->
     <link type="text/css" rel="stylesheet" href="../assets/plugins/dataTables/dataTables.bootstrap4.css">
     <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+    <script src="../assets/jquery/jquery.min.js"></script>
 </head>

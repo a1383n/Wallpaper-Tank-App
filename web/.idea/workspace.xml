@@ -20,49 +20,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="38957d2a-53d3-4cab-95c5-0ce1045a040d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/admin/ui/content.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/admin/ui/footer.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/admin/ui/header.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/admin/ui/sidebar.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/admin/ui/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/bootstrap/css/bootstrap-grid.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/bootstrap/css/bootstrap-grid.css.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/bootstrap/css/bootstrap-grid.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/bootstrap/css/bootstrap-grid.min.css.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/bootstrap/css/bootstrap-reboot.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/bootstrap/css/bootstrap-reboot.css.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/bootstrap/css/bootstrap-reboot.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/bootstrap/css/bootstrap-reboot.min.css.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/bootstrap/css/bootstrap.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/bootstrap/css/bootstrap.css.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/bootstrap/css/bootstrap.min.css.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/bootstrap/js/bootstrap.bundle.js.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/bootstrap/js/bootstrap.bundle.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/bootstrap/js/bootstrap.bundle.min.js.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/bootstrap/js/bootstrap.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/bootstrap/js/bootstrap.js.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/bootstrap/js/bootstrap.min.js.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/jquery/jquery.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/jquery/jquery.min.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/jquery/jquery.slim.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/jquery/jquery.slim.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/jquery/jquery.slim.min.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/web.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/web.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/login.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/css/bootstrap.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/bootstrap/css/bootstrap.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/ui/content.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/ui/content.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/ui/footer.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/ui/footer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/ui/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/ui/header.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/ui/sidebar.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/ui/sidebar.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/ui/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/admin/ui/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/ajax/fetch.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/ajax/fetch.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/js/bootstrap.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/bootstrap/js/bootstrap.bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/js/bootstrap.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/bootstrap/js/bootstrap.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/js/jquery-3.5.1.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/jquery/jquery.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/plugins/dataTables/images/sort_asc.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/plugins/dataTables/images/sort_asc.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/plugins/dataTables/images/sort_asc_disabled.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/plugins/dataTables/images/sort_asc_disabled.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/plugins/dataTables/images/sort_both.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/plugins/dataTables/images/sort_both.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/plugins/dataTables/images/sort_desc.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/plugins/dataTables/images/sort_desc.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/plugins/dataTables/images/sort_desc_disabled.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/plugins/dataTables/images/sort_desc_disabled.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/js/functions.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/functions.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,6 +49,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP 7.4.8" />
   <component name="ProjectId" id="1mSul2YAtUaDRYu8qVkjS2uSth8" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -97,6 +72,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/assets/bootstrap/css" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -125,6 +101,10 @@
       <updated>1609499461266</updated>
       <workItem from="1609499464904" duration="1260000" />
       <workItem from="1609510359856" duration="9868000" />
+      <workItem from="1609537611613" duration="1343000" />
+      <workItem from="1609575759822" duration="11735000" />
+      <workItem from="1609605268016" duration="1195000" />
+      <workItem from="1609606501725" duration="1362000" />
     </task>
     <servers />
   </component>
