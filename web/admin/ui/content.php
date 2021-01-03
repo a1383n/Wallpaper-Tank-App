@@ -1,4 +1,4 @@
-<?php (!$isLogin) ? header("Location: ../index.php") : null ?>
+<?php (!$isLogin) ? exit() : null ?>
 
 <?php if (isset($_GET['a']) && $_GET['a'] == "wallpaper"): ?>
     <div class="container content-box">
@@ -47,7 +47,7 @@
                                 $array = array();
                                 while ($row = mysqli_fetch_assoc($result)):
                                 ?>
-                                <option value="<?php echo $row['name'];?>"><?php echo $row['title']?></option>
+                                <option><?php echo $row['name']?></option>
                                 <?php endwhile;?>
                             </select>
                         </div>
@@ -64,7 +64,7 @@
                             </div>
                             <label for="add-form-wallpaper-tags-input-btn">You can press enter for add new tag</label>
                             <br>
-                            <label id="add-form-wallpaper-tags-input-error" class="bg-danger text-light p-1" style="display: none;"><li class="fa fa-warning"></li>&nbsp;Please add some tags</label>
+                            <label id="add-form-wallpaper-tags-input-error" class="bg-danger text-light p-1" style="display: none; width: 100%"><li class="fa fa-warning"></li>&nbsp;Please add some tags</label>
                             <input type="hidden" id="add-form-wallpaper-tags-array-string"/>
                         </div>
                         <div class="form-group">

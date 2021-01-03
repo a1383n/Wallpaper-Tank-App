@@ -36,7 +36,7 @@ $login_failure = '
 <div class="container">
     <div class="row">
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-            <div class="content-box">
+            <div class="content-box" style="margin-top: 25px">
                 <h4 class="h4 text-center">Login</h4>
                 <form role="form" action="login.php" method="post">
                     <div class="form-group">

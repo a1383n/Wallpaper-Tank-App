@@ -4,7 +4,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/core/autoloader.php";
 $security = new Security();
 $db = new DB();
 if (!$security->isLogin($_SESSION, $_SERVER, $_COOKIE)) {
-    header("Location: admin/login.php");
+    header("Location: login.php");
 } else {
     $isLogin = true;
     if (isset($_COOKIE['remember_me'])) {

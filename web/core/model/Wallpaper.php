@@ -30,7 +30,7 @@ class Wallpaper
         $tags = mysqli_escape_string($this->conn->getConnection(), $tags);
 
         $temp = UPLOAD_ROOT . $path . "/temp." . $image_type;
-        $wallpaper = UPLOAD_ROOT . $path . "/temp." . $image_type;
+        $wallpaper = UPLOAD_ROOT . $path . "/wallpaper." . $image_type;
         $sql = "INSERT INTO `wallpapers` (`id`, `title`, `category`, `tags`, `likes`, `views`, `downloads`, `author`, `path`, `temp`, `wallpaper`) VALUES 
         (NULL, '$title', '$category', '$tags', '0', '0', '0', '$author', '$path', '$temp', '$wallpaper')";
         $this->conn->runQuery($sql);

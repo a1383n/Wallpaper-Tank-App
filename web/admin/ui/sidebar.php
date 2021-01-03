@@ -1,4 +1,4 @@
-<?php (!$isLogin) ? header("Location: ../login.php") : null?>
+<?php (!$isLogin) ? exit() : null?>
 <div class="d-flex" id="wrapper">
     <!-- Sidebar -->
     <div class="bg-dark border-dark" id="sidebar-wrapper">
