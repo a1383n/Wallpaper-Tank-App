@@ -51,3 +51,6 @@
 #add-form-wallpaper-tags-list button span{
     margin-left: 5px;
 }
+.select2-container{
+    display: block !important;
+}

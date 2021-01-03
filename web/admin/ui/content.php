@@ -1,4 +1,4 @@
-<?php (!$isLogin) ? header("Location: ../login.php") : null ?>
+<?php (!$isLogin) ? header("Location: ../index.php") : null ?>
 
 <?php if (isset($_GET['a']) && $_GET['a'] == "wallpaper"): ?>
     <div class="container content-box">
@@ -36,12 +36,19 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="add-form-wallpaper-title-input">Title</label>
-                            <input type="text" name="title" id="add-form-wallpaper-title-input" class="form-control">
+                            <input type="text" name="title" id="add-form-wallpaper-title-input" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label>Category</label>
-                            <select class="form-control" id="add-form-wallpaper-category-input">
-                                <option>Category</option>
+                            <br>
+                            <select class="form-control" id="add-form-wallpaper-category-input" required>
+                                <?php
+                                $result = $db->Select("category");
+                                $array = array();
+                                while ($row = mysqli_fetch_assoc($result)):
+                                ?>
+                                <option value="<?php echo $row['name'];?>"><?php echo $row['title']?></option>
+                                <?php endwhile;?>
                             </select>
                         </div>
                         <div class="form-group">
@@ -55,7 +62,9 @@
                                     </button>
                                 </div>
                             </div>
-                            <label for="add-form-wallpaper-tags-input-btn">After evey tag press Enter</label>
+                            <label for="add-form-wallpaper-tags-input-btn">You can press enter for add new tag</label>
+                            <br>
+                            <label id="add-form-wallpaper-tags-input-error" class="bg-danger text-light p-1" style="display: none;"><li class="fa fa-warning"></li>&nbsp;Please add some tags</label>
                             <input type="hidden" id="add-form-wallpaper-tags-array-string"/>
                         </div>
                         <div class="form-group">
@@ -66,7 +75,7 @@
                         <div class="form-group">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="add-form-wallpaper-image-input"
-                                       accept="image/jpeg">
+                                       accept="image/jpeg" required>
                                 <label class="custom-file-label" for="add-form-wallpaper-image-input">Choose
                                     file</label>
                             </div>

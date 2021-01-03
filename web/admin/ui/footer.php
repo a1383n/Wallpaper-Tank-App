@@ -4,6 +4,7 @@
 <script src="../assets/bootstrap/js/bootstrap.bundle.js"></script>
 <script src="../assets/plugins/dataTables/jquery.dataTables.js"></script>
 <script src="../assets/plugins/dataTables/dataTables.bootstrap4.js"></script>
+<script src="../assets/plugins/select2/select2.js"></script>
 <script src="../assets/js/functions.js"></script>
 <?php if (isset($_GET['a']) && $_GET['a'] == "wallpaper"): ?>
     <script>

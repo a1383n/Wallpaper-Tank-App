@@ -1,5 +1,8 @@
-    $("add-form-wallpaper-tags-input-btn").click(function () {
-
+    $("#add-form-wallpaper-tags-input-btn").click(function () {
+        const text = $("#add-form-wallpaper-tags-input").val();
+        console.log(text);
+        newTagButtonGenerator($("#add-form-wallpaper-tags-input").val());
+        $("#add-form-wallpaper-tags-input").val("");
     })
     $('#add-form-wallpaper-tags-input').keypress(function (e) {
         var key = e.which;
@@ -39,13 +42,22 @@ function addButton() {
     //Remove img tag
     $("#addModal .modal-body img").remove();
 
+    //Add select2
+    $("#add-form-wallpaper-category-input").select2({
+        placeholder: "Select category"
+    });
+
     $(document).on("submit","#add-wallpaper-form",function (event) {
         event.preventDefault();
         const formData = new FormData();
         const file = $('#add-form-wallpaper-image-input')[0].files;
+        if (!$("#add-form-wallpaper-tags-array-string").val()){
+            $("#add-form-wallpaper-tags-input-error").show();
+            return;
+        }
         if (file.length > 0) {
             formData.append("title", $("#add-form-wallpaper-title-input").val());
-            formData.append("category", $("add-form-wallpaper-category-input").val());
+            formData.append("category", $("#add-form-wallpaper-category-input").val());
             formData.append("tags", $("#add-form-wallpaper-tags-array-string").val());
             formData.append("image",file[0]);
         }
@@ -57,13 +69,15 @@ function addButton() {
             processData: false,
             success: function (response) {
                 console.log(response)
-                document.getElementById("add-form-wallpaper-tags-list").appendChild(newTagButtonGenerator("title",0))
             }
         });
     });
 }
 
 function newTagButtonGenerator(title){
+    // hide error message
+    $("#add-form-wallpaper-tags-input-error").hide();
+
     const button = document.createElement("button");
     button.className = "btn btn-secondary tags";
     const span = document.createElement("span");
@@ -75,7 +89,7 @@ function newTagButtonGenerator(title){
         var i;
         for (i = 0; i < array.length;i++){
             if (array[i] == title){
-                array.splice(i,0);
+                array.splice(i,1);
             }
         }
         $("#add-form-wallpaper-tags-array-string").val(array);
@@ -107,8 +121,13 @@ function viewButton(id) {
 
     $("#addModal .modal-body .form-group").css("display", "none");
 
-    fetchSingleData(id);
+    const responseJSON = fetchSingleData(id);
 
+    // Remove Previous 'img' tag
+    $("#addModal .modal-body img").remove();
+
+    // Append new img tag
+    $("#addModal .modal-body").append('<img src="' + responseJSON['data']['wallpaper'] + '" class="embed-responsive" />');
 }
 
 function fetchSingleData(id) {
@@ -121,11 +140,7 @@ function fetchSingleData(id) {
             // TODO: Remove Log
             console.log(responseJSON);
 
-            // Remove Previous 'img' tag
-            $("#addModal .modal-body img").remove();
-
-            // Append new img tag
-            $("#addModal .modal-body").append('<img src="' + responseJSON['data']['wallpaper'] + '" class="embed-responsive" />');
+            return responseJSON;
         }
     });
 }
