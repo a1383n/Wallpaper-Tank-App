@@ -1,9 +1,10 @@
+<?php (!$isLogin) ? header("Location: ../login.php") : null?>
 </div>
 <!-- Bootstrap core JavaScript -->
-<script src="../assets/jquery/jquery.min.js"></script>
 <script src="../assets/bootstrap/js/bootstrap.bundle.js"></script>
 <script src="../assets/plugins/dataTables/jquery.dataTables.js"></script>
 <script src="../assets/plugins/dataTables/dataTables.bootstrap4.js"></script>
+<script src="../assets/plugins/select2/select2.js"></script>
 <script src="../assets/js/functions.js"></script>
 <?php if (isset($_GET['a']) && $_GET['a'] == "wallpaper"): ?>
     <script>
@@ -17,13 +18,6 @@
                 }
             });
         });
-
-        $("#wallpaper-add-btn").click(function () {
-            resetForm("add-wallpaper-form");
-            $(".modal-title").text("Add Wallpaper");
-            $("#add-form-wallpaper-action-input").val("Add");
-            $("#add-form-wallpaper-action-input").val("Add");
-        });
     </script>
 <?php endif; ?>
 <!-- Menu Toggle Script -->
@@ -31,5 +25,13 @@
     $("#menu-toggle").click(function (e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
+
+        if (document.getElementsByClassName("content-box")[0].style.marginTop == "20px"){
+            document.getElementsByClassName("content-box")[0].style.marginTop = "0"
+            document.getElementsByClassName("content-box")[0].style.marginBottom = "0"
+        }else{
+            document.getElementsByClassName("content-box")[0].style.marginTop = "20px"
+            document.getElementsByClassName("content-box")[0].style.marginBottom = "20px"
+        }
     });
 </script>

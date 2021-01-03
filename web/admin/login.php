@@ -70,7 +70,7 @@ $login_failure = '
                             $_SESSION['email'] = $result['email'];
 
                             if (isset($_POST['remember_me']) == true){
-                                setcookie("remember_me",$security->rememberMeCookieValue($username,$_SERVER['REMOTE_ADDR']),time()+3600);
+                                setcookie("remember_me",$security->rememberMeCookieValue($result['name'],$_SERVER['REMOTE_ADDR']),time()+3600);
                             }
 
                             echo $login_successful;

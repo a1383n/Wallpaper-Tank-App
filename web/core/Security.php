@@ -94,18 +94,18 @@ class Security
         $cookie_array = explode(":", $cookie_value);
 
         // Store username in cookie value
-        $cookie_username = $cookie_array[0];
+        $cookie_name = $cookie_array[0];
 
         // Decrypt cookie value and explode
         $cookie_decrypt = explode(":", $this->decryptionString($cookie_array[1]));
 
         //Check cookie username with decrypt username
-        if ($cookie_username == $cookie_decrypt[1]) {
+        if ($cookie_name == $cookie_decrypt[1]) {
             //Check Remote ip with decrypt ip
             if ($ip == $cookie_decrypt[0]) {
                 if ($cookie_decrypt[2] > time()) {
                     //Validation success
-                    return array("username" => $cookie_username);
+                    return array("name" => $cookie_name);
                 } else {
                     return false;
                 }
@@ -117,7 +117,13 @@ class Security
         }
     }
 
-    public function isLogin($session, $server = null, $cookie = null)
+    /**
+     * @param $session
+     * @param null $server
+     * @param null $cookie
+     * @return bool
+     */
+    public function isLogin($session, $server = null, $cookie = null): bool
     {
         if (isset($session['isLogin'])) {
             return true;
