@@ -29,15 +29,15 @@ if (!isset($_GET['t'])) {
                 '<li class="fa fa-download">&nbsp;</li><span>' . $row[6] . '</span><br>',
 
                 '<div class="btn-group" role="group"><buttom type="buttom" name="view" id="' . $row[0] . '" class="btn btn-primary" onclick="viewButton(' . $row[0] . ')">View</buttom>' .
-                '<buttom type="buttom" name="edit" id="' . $row[0] . '" class="btn btn-secondary">Edit</buttom>' .
-                '<buttom type="buttom" name="delete" id="' . $row[0] . '" class="btn btn-danger">Delete</buttom></div>'
+                '<buttom type="buttom" name="edit" id="' . $row[0] . '" class="btn btn-secondary" onclick="editButton('.$row[0].')">Edit</buttom>' .
+                '<buttom type="buttom" name="delete" id="' . $row[0] . '" class="btn btn-danger" onclick="deleteButton('.$row[0].')">Delete</buttom></div>'
 
 
             );
             array_push($data, $push);
         }
 
-        $array = array("draw" => 36, "recordsTotal" => mysqli_num_rows($result), "recordsFiltered" => mysqli_num_rows($result), "data" => $data);
+        $array = array("draw" => 1, "recordsTotal" => mysqli_num_rows($result), "recordsFiltered" => mysqli_num_rows($result), "data" => $data);
 
         echo json_encode($array);
     }

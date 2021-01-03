@@ -1,7 +1,7 @@
 <?php
 
 define("SITE","http://localhost");
-define("ROOT_FOLDER","/");
+define("ROOT_FOLDER","/web/");
 define("API_KEY",123456789);
 define("DATABASE_HOST","localhost");
 define("DATABASE_USERNAME","root");

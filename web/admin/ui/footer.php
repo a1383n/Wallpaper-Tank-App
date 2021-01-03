@@ -1,15 +1,15 @@
-<?php (!$isLogin) ? header("Location: ../login.php") : null?>
+<?php (!$isLogin) ? exit() : null?>
 </div>
 <!-- Bootstrap core JavaScript -->
 <script src="../assets/bootstrap/js/bootstrap.bundle.js"></script>
 <script src="../assets/plugins/dataTables/jquery.dataTables.js"></script>
 <script src="../assets/plugins/dataTables/dataTables.bootstrap4.js"></script>
 <script src="../assets/plugins/select2/select2.js"></script>
-<script src="../assets/js/functions.js"></script>
 <?php if (isset($_GET['a']) && $_GET['a'] == "wallpaper"): ?>
     <script>
+        var dataTable;
         $(document).ready(function () {
-            var DataTable = $('#wallpaper-tbl').DataTable({
+             dataTable = $('#wallpaper-tbl').DataTable({
                 "processing": true,
                 "order": [[0, "desc"]],
                 "ajax": {
@@ -18,8 +18,14 @@
                 }
             });
         });
+
+        function reloadTable(){
+            dataTable.ajax.reload();
+        }
     </script>
 <?php endif; ?>
+<script src="../assets/js/functions.js"></script>
+
 <!-- Menu Toggle Script -->
 <script>
     $("#menu-toggle").click(function (e) {

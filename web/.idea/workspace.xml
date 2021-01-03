@@ -20,17 +20,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="38957d2a-53d3-4cab-95c5-0ce1045a040d" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/api/ajax/delete.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/ajax/edit.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/login.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin/ui/content.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/ui/content.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin/ui/footer.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/ui/footer.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin/ui/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/ui/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin/ui/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/admin/ui/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/ui/sidebar.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/ui/sidebar.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/ajax/add.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/ajax/add.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/ajax/fetch.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/ajax/fetch.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/js/functions.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/functions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/plugins/select2/select2.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/plugins/select2/select2.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Security.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Security.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/functions.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/model/Wallpaper.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/model/Wallpaper.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,6 +70,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
@@ -107,6 +112,8 @@
       <workItem from="1609605268016" duration="1195000" />
       <workItem from="1609606501725" duration="1937000" />
       <workItem from="1609629471524" duration="4189000" />
+      <workItem from="1609634778992" duration="780000" />
+      <workItem from="1609662891649" duration="14350000" />
     </task>
     <servers />
   </component>
