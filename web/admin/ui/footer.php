@@ -6,23 +6,7 @@
 <script src="../assets/plugins/dataTables/dataTables.bootstrap4.js"></script>
 <script src="../assets/plugins/select2/select2.js"></script>
 <?php if (isset($_GET['a']) && $_GET['a'] == "wallpaper"): ?>
-    <script>
-        var dataTable;
-        $(document).ready(function () {
-             dataTable = $('#wallpaper-tbl').DataTable({
-                "processing": true,
-                "order": [[0, "desc"]],
-                "ajax": {
-                    url: "../api/ajax/fetch.php",
-                    type: "GET"
-                }
-            });
-        });
 
-        function reloadTable(){
-            dataTable.ajax.reload();
-        }
-    </script>
 <?php endif; ?>
 <script src="../assets/js/functions.js"></script>
 

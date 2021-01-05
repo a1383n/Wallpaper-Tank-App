@@ -35,4 +35,25 @@ class Category
         return $array;
     }
 
+    public function Add($name,$color){
+        $name = escape_string($name,$this->conn);
+        $color = escape_string($color,$this->conn);
+
+        $sql = "INSERT INTO `category` (`id`, `name`, `color`, `count`) VALUES (NULL,'$name' , '$color' , '0')";
+        $this->conn->runQuery($sql);
+    }
+
+    public function Update($id,$name,$color){
+        $id = escape_string($id,$this->conn);
+        $name = escape_string($name,$this->conn);
+        $color = escape_string($color,$this->conn);
+
+        $this->conn->runQuery("UPDATE `$this->table_name` SET `name` = '$name' WHERE `$this->table_name`.`id` =" . $id);
+        $this->conn->runQuery("UPDATE `$this->table_name` SET `color` = '$color' WHERE `$this->table_name`.`id` =" . $id);
+    }
+
+    public function Delete($id){
+        $id = escape_string($id,$this->conn);
+        $this->conn->runQuery("DELETE FROM `$this->table_name` WHERE `$this->table_name`.`id`=" . $id);
+    }
 }
