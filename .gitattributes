@@ -1,4 +1,6 @@
-*.php linguist-language=PHP
+*.php linguist-language=PHP.
+
+web/assets/bootstrap/js/* linguist-vendored
 web/assets/jquery/* linguist-vendored
 
 
