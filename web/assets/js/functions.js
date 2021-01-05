@@ -1,3 +1,4 @@
+// ****************************************** WALLPAPER **************************************
 $("#add-form-wallpaper-tags-input-btn").click(function () {
     const text = $("#add-form-wallpaper-tags-input").val();
     console.log(text);
@@ -238,6 +239,88 @@ function deleteButton(id) {
             contentType: false,
             processData: false,
             success: function (){
+                reloadTable();
+            }
+        });
+    }
+}
+
+// ***************************************** CATEGORY ********************************
+function addCategory(){
+    $("#add-category-action").val("Add");
+    $("#add-category-name-input").val("");
+    $("#add-category-color-input").val("#333333");
+
+    $(document).on("submit","#add-category-form",function (event) {
+        if($("#add-category-action").val() == "Add") {
+            event.preventDefault();
+
+            const formData = new FormData();
+            formData.append("name", $("#add-category-name-input").val());
+            formData.append("color", $("#add-category-color-input").val());
+
+            $.ajax({
+                url: "../api/ajax/add.php?t=category",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (responseJSON) {
+                    $("#categoryModal").modal('toggle');
+                    reloadTable();
+                }
+            });
+        }
+    })
+}
+
+function editCategory(id){
+    $("#categoryModal").modal("show");
+    $("#add-category-action").val("Edit");
+    $.ajax({
+        url: "../api/ajax/fetch.php?t=category&id="+id,
+        type: "GET",
+        contentType:false,
+        processData: false,
+        success: function (responseJSON) {
+            $("#add-category-name-input").val(responseJSON["data"]["name"]);
+            $("#add-category-color-input").val(responseJSON["data"]["color"]);
+        }
+    });
+
+    $(document).on("submit","#add-category-form",function (event) {
+        event.preventDefault();
+        if ($("#add-category-action").val() == "Edit"){
+            const formData = new FormData();
+            formData.append("id",id);
+            formData.append("name",$("#add-category-name-input").val());
+            formData.append("color",$("#add-category-color-input").val());
+
+            $.ajax({
+                url: "../api/ajax/edit.php?t=category",
+                type: "POST",
+                data: formData,
+                contentType:false,
+                processData: false,
+                success: function (responseJSON){
+                    if (responseJSON["ok"] == true) {
+                        $("#categoryModal").modal("hide");
+                        reloadTable();
+                    }
+                }
+            });
+        }
+    })
+}
+
+function deleteCategory(id){
+    if (confirm("Are you sure you want delete this row?")){
+        $.ajax({
+            url: "../api/ajax/delete.php?t=category&id="+id,
+            type: "GET",
+            contentType: false,
+            processData: false,
+            success: function (responseJSON) {
                 reloadTable();
             }
         });
