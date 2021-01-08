@@ -47,7 +47,7 @@ class WallpaperController extends Controller
      */
     public function show(Wallpaper $wallpaper,$id)
     {
-        return view('front.wallpaper',['wallpaper'=>$wallpaper->find($id)]);
+        return view('front.wallpaper',['wallpaper'=>$wallpaper->findOrFail($id)->abrot(404)]);
     }
 
     /**
