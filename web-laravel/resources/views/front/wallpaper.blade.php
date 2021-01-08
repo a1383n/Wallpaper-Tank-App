@@ -56,7 +56,8 @@
                 </h2>
             </div>
             <div class="box-info">
-                <h4>Category: {{$wallpaper->category_id}}</h4>
+                @inject('categoryController','\App\Http\Controllers\CategoryController')
+                <h4>Category: <a href="#">{{$categoryController->show(new \App\Models\Category,$wallpaper->category_id)->title}}</a></h4>
             </div>
         </div>
     </div>
