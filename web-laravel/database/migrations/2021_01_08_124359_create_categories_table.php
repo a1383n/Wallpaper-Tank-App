@@ -17,6 +17,7 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('title');
+            $table->string('color',7)->default('#333333');
             $table->string('items_count');
             $table->bigInteger('user_id');
             $table->timestamps();
