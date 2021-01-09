@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class WallpaperController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -47,7 +48,7 @@ class WallpaperController extends Controller
      */
     public function show(Wallpaper $wallpaper,$id)
     {
-        return view('front.wallpaper',['wallpaper'=>$wallpaper->findOrFail($id)->abrot(404)]);
+        return view('front.wallpaper',['wallpaper'=>$wallpaper->findOrFail($id)]);
     }
 
     /**

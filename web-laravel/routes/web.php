@@ -13,5 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/',[\App\Http\Controllers\WallpaperController::class,'index']);
-Route::get('/wallpapers/{id}',[\App\Http\Controllers\WallpaperController::class,'show'])->where('id','[0-9]+')->name('single_wallpaper');
+Route::get('/',[\App\Http\Controllers\WallpaperController::class,'index'])->name('index');
+Route::get('/wallpapers/{id}',[\App\Http\Controllers\WallpaperController::class,'show'])->name('single_wallpaper')->where('id','[0-9]+');
+
+Route::get('/categories',[\App\Http\Controllers\CategoryController::class,'index'])->name('categories');
+Route::get('/categories/{id}',[\App\Http\Controllers\CategoryController::class,'show'])->name('single_categories')->where('id','[0-9]+');
+

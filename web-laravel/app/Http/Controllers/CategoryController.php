@@ -14,7 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return view('front.category',['data'=>Category::get()]);
     }
 
     /**
