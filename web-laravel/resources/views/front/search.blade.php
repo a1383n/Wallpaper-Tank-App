@@ -1,10 +1,10 @@
 @extends('front.layout')
-
-@section('title','Home')
+@section('title','Search Result')
+@section('search_value',$value)
 
 @section('content')
-@foreach($data as $wallpaper)
-    <div class="container-style" onclick="window.open('{{route('single_wallpaper',['id'=>$wallpaper->id])}}','_parent')">
+    @foreach($data as $wallpaper)
+    <div class="container-style" onclick="window.open('{{route('single_wallpaper',['id'=>$wallpaper->id])}}')">
         <div class="img-container">
             <img src="{{$wallpaper->temp_url}}" alt="{{$wallpaper->title}}">
         </div>
@@ -17,5 +17,5 @@
             <h2>{{$wallpaper->title}}</h2>
         </div>
     </div>
-@endforeach
+    @endforeach
 @endsection
