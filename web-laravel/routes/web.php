@@ -17,5 +17,6 @@ Route::get('/',[\App\Http\Controllers\WallpaperController::class,'index'])->name
 Route::get('/wallpapers/{id}',[\App\Http\Controllers\WallpaperController::class,'show'])->name('single_wallpaper')->where('id','[0-9]+');
 
 Route::get('/categories',[\App\Http\Controllers\CategoryController::class,'index'])->name('categories');
-Route::get('/categories/{id}',[\App\Http\Controllers\CategoryController::class,'show'])->name('single_categories')->where('id','[0-9]+');
+
+Route::get('/search',[\App\Http\Controllers\WallpaperController::class,'search'])->name('search');
 

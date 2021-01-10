@@ -19,7 +19,10 @@
             </button>
         </div>
         <div class="box-info">
-            <h4>Category: <a href="#">{{\App\Models\Category::find($wallpaper->category_id)->title}}</a></h4>
+            @php
+                $category = \App\Models\Category::find($wallpaper->category_id);
+            @endphp
+            <h4>Category: <a href="/search?q=category:{{$category->name}}">{{$category->title}}</a></h4>
             <h4>Author: {{\App\Models\User::find($wallpaper->user_id)->name}}</h4>
             <h4>Tags:</h4>
             <div class="tags-list">
