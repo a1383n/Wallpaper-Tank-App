@@ -4,7 +4,7 @@
 
 @section('content')
     @foreach($data as $wallpaper)
-    <div class="container-style" onclick="window.open('{{route('single_wallpaper',['id'=>$wallpaper->id])}}')">
+    <div class="container-style" onclick="window.open('{{route('single_wallpaper',['id'=>$wallpaper->id])}}','_parent')">
         <div class="img-container">
             <img src="{{$wallpaper->temp_url}}" alt="{{$wallpaper->title}}">
         </div>

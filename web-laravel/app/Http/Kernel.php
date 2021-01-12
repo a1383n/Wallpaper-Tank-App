@@ -42,6 +42,9 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+
+            // My custom middleware
+            'isAuthorized' => \App\Http\Middleware\isAuthorized::class
         ],
     ];
 
