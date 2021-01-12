@@ -110,7 +110,7 @@
                     "processing": true,
                     "order": [[0, "desc"]],
                     "ajax": {
-                        url: "../api/ajax/fetch.php",
+                        url: "/api/wallpapers",
                         type: "GET"
                     }
                 });

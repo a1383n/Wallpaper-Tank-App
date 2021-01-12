@@ -53,7 +53,8 @@
     </div>
 </div>
 <script src="{{asset('js/app.js')}}"></script>
-<script src="{{asset('plugins/dataTables/jquery.dataTables.js')}}"></script>
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
 <script src="{{asset('plugins/select2/select2.js')}}"></script>
 <script src="{{asset('js/admin.js')}}"></script>
 <!-- Menu Toggle Script -->

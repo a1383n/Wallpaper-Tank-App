@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Models\Wallpaper;
+use App\Models\Category;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,5 +17,21 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/wallpapers',function (Request $request){
-    return 'as';
+    $wallpapers = Wallpaper::get();
+    //Check if request from dataTable plugin
+    if (!empty($request->input('_')) && $request->ajax()){
+        $data = array();
+        foreach ($wallpapers as $wallpaper){
+            array_push($data,[
+                $wallpaper->id,
+                $wallpaper->title,
+                Category::find($wallpaper->category_id)->title,
+                $wallpaper->tags
+            ]);
+        }
+
+        return ['draw'=>$request->input('_'),'recordsTotal'=>sizeof($wallpapers),'data'=>$data];
+    }else{
+        return $wallpapers;
+    }
 });
