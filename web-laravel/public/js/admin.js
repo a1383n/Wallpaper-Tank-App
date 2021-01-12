@@ -1,4 +1,3 @@
-// ****************************************** WALLPAPER **************************************
 $("#add-form-wallpaper-tags-input-btn").click(function () {
     const text = $("#add-form-wallpaper-tags-input").val();
     console.log(text);
@@ -65,10 +64,15 @@ function addButton() {
 
         document.getElementById("add-form-wallpaper-action-input").disabled = true;
 
+        formData.append('action','PUT');
+
         $.ajax({
-            url: "../api/ajax/add.php",
+            url: "",
             type: "POST",
             data: formData,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             contentType: false,
             processData: false,
             success: function (responseJSON) {

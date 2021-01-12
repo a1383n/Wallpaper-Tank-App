@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,16 +15,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Root Site Routes
-Route::get('/',[\App\Http\Controllers\WallpaperController::class,'index'])->name('index');
-Route::get('/wallpapers/{id}',[\App\Http\Controllers\WallpaperController::class,'show'])->name('single_wallpaper')->where('id','[0-9]+');
-Route::get('/categories',[\App\Http\Controllers\CategoryController::class,'index'])->name('categories');
-Route::get('/search',[\App\Http\Controllers\WallpaperController::class,'search'])->name('search');
+Route::get('/', [\App\Http\Controllers\WallpaperController::class, 'index'])->name('index');
+Route::get('/wallpapers/{id}', [\App\Http\Controllers\WallpaperController::class, 'show'])->name('single_wallpaper')->where('id', '[0-9]+');
+Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index'])->name('categories');
+Route::get('/search', [\App\Http\Controllers\WallpaperController::class, 'search'])->name('search');
 
 // Authentication Routes
-Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class,'showLoginForm'])->name('login');
-Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class,'login']);
-Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class,'logout'])->name('logout');
+Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login']);
+Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 
 //Admin Panel Routes
 Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin_home')->middleware('auth');
-Route::get('/admin/wallpapers',[\App\Http\Controllers\AdminController::class,'wallpapers'])->name('admin_wallpapers')->middleware('auth');
+Route::get('/admin/wallpapers', [\App\Http\Controllers\AdminController::class, 'wallpapers'])->name('admin_wallpapers')->middleware('auth');
+
+Route::post('/admin/wallpapers',[\App\Http\Controllers\WallpaperController::class,'router']);

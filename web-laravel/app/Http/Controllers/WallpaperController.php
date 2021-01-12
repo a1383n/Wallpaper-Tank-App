@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Wallpaper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class WallpaperController extends Controller
 {
@@ -17,6 +19,15 @@ class WallpaperController extends Controller
     public function index()
     {
         return view('front.home', ['data' => Wallpaper::orderBy('id', 'desc')->get()]);
+    }
+
+    public function router(Request $request)
+    {
+        switch ($request->input('action')) {
+            case 'PUT';
+                return $this->store($request);
+                break;
+        }
     }
 
     /**
@@ -63,16 +74,6 @@ class WallpaperController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
@@ -80,7 +81,29 @@ class WallpaperController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $wallpaper = new Wallpaper();
+        $wallpaper->title = $request->input('title');
+        $wallpaper->category_id = $request->input('category_id');
+        $wallpaper->tags = $request->input('tags');
+        $wallpaper->user_id = Auth::id();
+
+        // Create md5 path
+        $path = md5(microtime());
+        $wallpaper->path = $path;
+
+        $image = $request->file('image');
+
+        // Image Upload checkpoint
+        // Check extension
+        if ($image->extension() != 'jpg' && $image->extension() != 'jpeg') {
+            return ["ok" => false, "des" => "only JPG & JPEG files are allowed"];
+        } //Check size
+        elseif ($image->getSize() > 5242880 /*5M*/) {
+            return ["ok" => false, "des" => "File larger than 5M"];
+        }else{
+            dd(Storage::disk('public')->putFile('wallpapers/'.$path,$image));
+        }
+
     }
 
     /**
