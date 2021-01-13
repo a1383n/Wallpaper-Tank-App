@@ -42,10 +42,9 @@
                             <label>Category</label>
                             <br>
                             <select class="form-control" id="add-form-wallpaper-category-input" required>
-                                <option>iphone</option>
-                                <option>flower</option>
-                                <option>night</option>
-                                <option>تست فارسی</option>
+                                @foreach($categories as $category)
+                                    <option value="{{$category->id}}">{{$category->title}}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group">

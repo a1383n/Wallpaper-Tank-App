@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -17,6 +18,6 @@ class AdminController extends Controller
     }
 
     public function wallpapers(){
-        return view('admin.wallpapers',['where'=>'wallpapers']);
+        return view('admin.wallpapers',['where'=>'wallpapers','categories'=>Category::get()]);
     }
 }

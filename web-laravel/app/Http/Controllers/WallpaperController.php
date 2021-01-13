@@ -7,6 +7,7 @@ use App\Models\Wallpaper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class WallpaperController extends Controller
 {
@@ -26,6 +27,12 @@ class WallpaperController extends Controller
         switch ($request->input('action')) {
             case 'PUT';
                 return $this->store($request);
+                break;
+            case 'EDIT':
+                return $this->update($request);
+                break;
+            case 'DELETE':
+                return $this->destroy($request);
                 break;
         }
     }
@@ -78,9 +85,17 @@ class WallpaperController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Throwable
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'title' => 'required',
+            'category_id' => 'required|int',
+            'tags' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:5120'/*5M*/
+        ]);
+
         $wallpaper = new Wallpaper();
         $wallpaper->title = $request->input('title');
         $wallpaper->category_id = $request->input('category_id');
@@ -93,28 +108,24 @@ class WallpaperController extends Controller
 
         $image = $request->file('image');
 
-        // Image Upload checkpoint
-        // Check extension
-        if ($image->extension() != 'jpg' && $image->extension() != 'jpeg') {
-            return ["ok" => false, "des" => "only JPG & JPEG files are allowed"];
-        } //Check size
-        elseif ($image->getSize() > 5242880 /*5M*/) {
-            return ["ok" => false, "des" => "File larger than 5M"];
-        }else{
-            dd(Storage::disk('public')->putFile('wallpapers/'.$path,$image));
+        $image->storePubliclyAs('wallpapers/' . $path, 'wallpaper.' . $image->extension(), 'public');
+        $wallpaper_url = env('APP_URL') . Storage::url('wallpapers/' . $path . '/wallpaper.' . $image->extension());
+        $temp_image = Image::make($image->getRealPath());
+        $resize_height = floor($temp_image->height() * (300 / $temp_image->width()));
+        $temp_image->resize(300, $resize_height);
+        $temp_image->save('storage/wallpapers/' . $path . '/temp.' . $image->extension());
+        $temp_url = env('APP_URL') . Storage::url('wallpapers/' . $path . '/temp.' . $image->extension());
+
+        $wallpaper->wallpaper_url = $wallpaper_url;
+        $wallpaper->temp_url = $temp_url;
+
+
+        if ($wallpaper->saveOrFail()) {
+            return ['ok' => true];
+        } else {
+            return ['ok' => false, 'des' => 'Error while store value in database'];
+            Storage::delete(['wallpapers/' . $path . '/wallpaper.' . $image->extension(), 'wallpapers/' . $path . '/temp.' . $image->extension()]);
         }
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Wallpaper $wallpaper
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Wallpaper $wallpaper)
-    {
-        //
     }
 
     /**
@@ -124,19 +135,40 @@ class WallpaperController extends Controller
      * @param \App\Models\Wallpaper $wallpaper
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Wallpaper $wallpaper)
+    public function update(Request $request)
     {
-        //
+        $request->validate([
+            'id' => 'required',
+            'title' => 'required',
+            'category_id' => 'required',
+            'tags' => 'required'
+        ]);
+
+        $wallpaper = Wallpaper::findOrfail($request->input('id'));
+        $wallpaper->title = $request->input('title');
+        $wallpaper->category_id = $request->input('category_id');
+        $wallpaper->tags = $request->input('tags');
+        $wallpaper->save();
+
+        return ['ok' => true];
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Wallpaper $wallpaper
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return void
      */
-    public function destroy(Wallpaper $wallpaper)
+    public
+    function destroy(Request $request)
     {
-        //
+        $request->validate([
+            'id'=>'required'
+        ]);
+
+        Wallpaper::findOrfail($request->input('id'))->delete();
+
+        return ['ok'=>true];
     }
+
 }
