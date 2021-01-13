@@ -26,7 +26,14 @@ Route::get('/wallpapers',function (Request $request){
                 $wallpaper->id,
                 $wallpaper->title,
                 Category::find($wallpaper->category_id)->title,
-                $wallpaper->tags
+                $wallpaper->tags,
+                '<li class="fa fa-heart"></li>&nbsp;<span>' . $wallpaper->likes . '</span><br>' .
+                '<li class="fa fa-eye"></li>&nbsp;<span>' . $wallpaper->views . '</span><br>' .
+                '<li class="fa fa-download">&nbsp;</li><span>' . $wallpaper->downloads . '</span><br>',
+
+                '<div class="btn-group" role="group"><buttom type="buttom" name="view" id="' .$wallpaper->id. '" class="btn btn-primary" onclick="viewButton(' . $wallpaper->id . ')">View</buttom>' .
+                '<buttom type="buttom" name="edit" id="' . $wallpaper->id . '" class="btn btn-secondary" onclick="editButton(' . $wallpaper->id . ')">Edit</buttom>' .
+                '<buttom type="buttom" name="delete" id="' . $wallpaper->id . '" class="btn btn-danger" onclick="deleteButton(' . $wallpaper->id . ')">Delete</buttom></div>'
             ]);
         }
 
@@ -35,3 +42,7 @@ Route::get('/wallpapers',function (Request $request){
         return $wallpapers;
     }
 });
+
+Route::get('wallpapers/{id}',function ($id){
+    return Wallpaper::findOrfail($id);
+})->where('id','[0-9]+');

@@ -57,7 +57,7 @@ function addButton() {
         }
         if (file.length > 0) {
             formData.append("title", $("#add-form-wallpaper-title-input").val());
-            formData.append("category", $("#add-form-wallpaper-category-input").val());
+            formData.append("category_id", $("#add-form-wallpaper-category-input").val());
             formData.append("tags", $("#add-form-wallpaper-tags-array-string").val());
             formData.append("image", file[0]);
         }
@@ -145,19 +145,19 @@ function viewButton(id) {
 
 function fetchWallpaperImage(id) {
     $.ajax({
-        url: "../api/ajax/fetch.php?id=" + id,
+        url: "/api/wallpapers/"+id,
         type: "GET",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
         contentType: false,
         processData: false,
         success: function (responseJSON) {
-            // TODO: Remove Log
-            console.log(responseJSON['data']['wallpaper']);
-
             // Remove Previous 'img' tag
             $("#addModal .modal-body img").remove();
 
             // Append new img tag
-            $("#addModal .modal-body").append('<img src="' + responseJSON['data']['wallpaper'] + '" class="embed-responsive" />');
+            $("#addModal .modal-body").append('<img src="' + responseJSON['wallpaper_url'] + '" class="embed-responsive" />');
         }
     });
 }
@@ -176,19 +176,19 @@ function editButton(id) {
     $("#addModal .modal-body img").remove();
 
     $.ajax({
-        url: "../api/ajax/fetch.php?id=" + id,
+        url: "/api/wallpapers/" + id,
         type: "GET",
         contentType: false,
         processData: false,
         success: function (responseJSON) {
             //set inputs values
-            $("#add-form-wallpaper-title-input").val(responseJSON['data']['title']);
-            $("#add-form-wallpaper-id-input").val(responseJSON['data']['id']);
+            $("#add-form-wallpaper-title-input").val(responseJSON['title']);
+            $("#add-form-wallpaper-id-input").val(responseJSON['id']);
 
             // show tags
             document.getElementById("add-form-wallpaper-tags-list").innerHTML = "";
             $("#add-form-wallpaper-tags-array-string").val("");
-            const array = responseJSON['data']['tags'].toString().split(",");
+            const array = responseJSON['tags'].toString().split(",");
             var i;
             for (i = 0; i < array.length; i++) {
                 newTagButtonGenerator(array[i]);
@@ -200,7 +200,7 @@ function editButton(id) {
             const options = document.getElementById("add-form-wallpaper-category-input").getElementsByTagName("option");
             var i;
             for (i = 0; i < options.length; i++) {
-                if (options[i].innerHTML == responseJSON['data']['category']) {
+                if (options[i].value == responseJSON['category_id']) {
                     options[i].selected = true;
                 }
             }
@@ -216,20 +216,26 @@ function editButton(id) {
         const formData = new FormData();
         formData.append("id", $("#add-form-wallpaper-id-input").val());
         formData.append("title", $("#add-form-wallpaper-title-input").val());
-        formData.append("category", $("#add-form-wallpaper-category-input").val());
+        formData.append("category_id", $("#add-form-wallpaper-category-input").val());
         formData.append("tags", $("#add-form-wallpaper-tags-array-string").val());
 
+        formData.append('action','EDIT');
+
         $.ajax({
-            url: "../api/ajax/edit.php",
+            url: "",
             type: "POST",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             data: formData,
             contentType: false,
             processData: false,
-            success: function (response) {
-                console.log(response);
-                document.getElementById("add-form-wallpaper-action-input").disabled = false;
-                $("#addModal").modal("hide");
-                reloadTable();
+            success: function (responseJSON) {
+                if (responseJSON['ok']) {
+                    document.getElementById("add-form-wallpaper-action-input").disabled = false;
+                    $("#addModal").modal("hide");
+                    reloadTable();
+                }
             }
         });
     })
@@ -237,9 +243,18 @@ function editButton(id) {
 
 function deleteButton(id) {
     if (confirm("Are you sure you want to delete this row?")) {
+
+        const formData = new FormData();
+        formData.append('id',id);
+        formData.append('action','DELETE');
+
         $.ajax({
-            url: "../api/ajax/delete.php?id=" + id,
-            type: "GET",
+            url: "",
+            type: "POST",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: formData,
             contentType: false,
             processData: false,
             success: function (){
