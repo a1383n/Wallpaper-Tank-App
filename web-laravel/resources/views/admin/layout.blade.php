@@ -5,7 +5,7 @@
 <div class="d-flex" id="wrapper">
     <!-- Sidebar -->
     <div class="bg-dark border-dark" id="sidebar-wrapper">
-        <div class="sidebar-heading bg-dark text-light">Start Bootstrap</div>
+        <div class="sidebar-heading bg-dark text-light">AdminPanel</div>
         <div class="list-group list-group-flush">
             <a href="{{route('admin_home')}}" class="list-group-item list-group-item-action bg-dark text-light">
                 <li class="fa fa-dashboard"></li>&nbsp;Dashboard</a>
@@ -33,7 +33,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="../index.php">Home Site<span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="{{route('index')}}">Home Site<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"

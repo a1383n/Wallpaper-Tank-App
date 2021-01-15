@@ -25,7 +25,7 @@
                 @php
                     $category = \App\Models\Category::find($wallpaper->category_id);
                 @endphp
-                <h4>Category: <a href="/search?q=category:{{$category->name}}">{{$category->title}}</a></h4>
+                <h4>Category: <a href="/search?q=category:{{$category->name}}">{{$category->name}}</a></h4>
                 <h4>Author: {{\App\Models\User::find($wallpaper->user_id)->name}}</h4>
                 <h4>Tags:</h4>
                 <div class="tags-list">
@@ -87,9 +87,27 @@
         }
 
         function Download() {
+            const formData = new FormData();
+            formData.append('id',{{$wallpaper->id}});
+            formData.append('action','DOWNLOAD');
+
+            $.ajax({
+                url: "/download",
+                headers: {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                data: formData,
+                type: "POST",
+                contentType: false,
+                processData: false,
+                success: function (responseJSON) {
+
+                }
+            });
             var a = document.createElement('a');
             a.href = "{{$wallpaper->wallpaper_url}}";
-            a.download = "{{basename($wallpaper->wallpaper_url)}}";
+            a.download = "{{$wallpaper->id."-".basename($wallpaper->wallpaper_url)}}";
+            a.target = "_blank";
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);

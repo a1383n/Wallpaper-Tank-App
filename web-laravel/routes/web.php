@@ -37,3 +37,4 @@ Route::get('/admin/categories',[\App\Http\Controllers\AdminController::class,'ca
 Route::post('/admin/categories',[\App\Http\Controllers\CategoryController::class,'router'])->middleware('auth');
 
 Route::post('/like/',[\App\Http\Controllers\WallpaperController::class,'router']);
+Route::post('/download/',[\App\Http\Controllers\WallpaperController::class,'router']);
