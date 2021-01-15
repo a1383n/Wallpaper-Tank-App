@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Wallpaper;
+use App\Models\WallpaperLikes;
+use App\Models\WallpaperViews;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
@@ -34,6 +38,11 @@ class WallpaperController extends Controller
             case 'DELETE':
                 return $this->destroy($request);
                 break;
+            case 'INCREASE':
+                return $this->increaseLike($request->input('id'));
+                break;
+            case 'DECREASE':
+                return $this->decreaseLike($request->input('id'));
         }
     }
 
@@ -46,6 +55,7 @@ class WallpaperController extends Controller
      */
     public function show(Wallpaper $wallpaper, $id)
     {
+        WallpaperViews::createViewLog($wallpaper->find($id));
         return view('front.wallpaper', ['wallpaper' => $wallpaper->findOrFail($id)]);
     }
 
@@ -58,7 +68,7 @@ class WallpaperController extends Controller
                 case 1:
                     $result = Wallpaper::where('title', 'like', '%' . $value[0] . '%')->orWhere('tags', 'like', '%' . $value[0] . '%')->get();
                     if (sizeof($result) > 0) {
-                        return view('front.search', ['value' => $value[0], 'data' => $result]);
+                        return view('front.home', ['search_value' => $value[0], 'data' => $result]);
                     } else {
                         abort(404);
                     }
@@ -68,7 +78,7 @@ class WallpaperController extends Controller
                         $category = Category::where('name', $value[1])->get();
                         $result = Wallpaper::where('category_id', $category[0]->id)->get();
                         if (sizeof($result) > 0) {
-                            return view('front.search', ['value' => $value[1], 'data' => $result]);
+                            return view('front.home', ['search_value' => $value[1], 'data' => $result]);
                         } else {
                             abort(404);
                         }
@@ -121,6 +131,9 @@ class WallpaperController extends Controller
 
 
         if ($wallpaper->saveOrFail()) {
+            $category = Category::find($wallpaper->category_id);
+            $category->items_count++;
+            $category->save();
             return ['ok' => true];
         } else {
             return ['ok' => false, 'des' => 'Error while store value in database'];
@@ -159,8 +172,7 @@ class WallpaperController extends Controller
      * @param Request $request
      * @return void
      */
-    public
-    function destroy(Request $request)
+    public function destroy(Request $request)
     {
         $request->validate([
             'id'=>'required'
@@ -168,7 +180,29 @@ class WallpaperController extends Controller
 
         Wallpaper::findOrfail($request->input('id'))->delete();
 
+        $category = Category::find(Wallpaper::find($request->input('id'))->category_id);
+        $category->items_count--;
+        $category->save();
+
         return ['ok'=>true];
+    }
+
+    /**
+     * Increase Like count
+     * @param $id The id of wallpaper must increase likes
+     * @return array
+     */
+    public function increaseLike($id){
+        return ['ok'=>WallpaperLikes::increase(Wallpaper::findOrfail($id)),'count'=>Wallpaper::find($id)->likes];
+    }
+
+    /**
+     * Decrease Like count
+     * @param $id The id of wallpaper must increase likes
+     * @return array
+     */
+    public function decreaseLike($id){
+        return ['ok'=>WallpaperLikes::decrease(Wallpaper::findOrfail($id)),'count'=>Wallpaper::find($id)->likes];
     }
 
 }

@@ -4,60 +4,71 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
         return view('front.category',['data'=>Category::get()]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function router(Request $request){
+        switch ($request->input('action')) {
+            case 'PUT';
+                return $this->store($request);
+                break;
+            case 'EDIT':
+                return $this->update($request);
+                break;
+            case 'DELETE':
+                return $this->destroy($request);
+                break;
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return array|bool[]
+     * @throws \Throwable
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'=>'required',
+            'title'=>'required',
+            'color'=>'required'
+        ]);
+
+        $input = $request->only('name','title','color');
+
+        $category = new Category();
+        $category->name = $input['name'];
+        $category->title = $input['title'];
+        $category->color = $input['color'];
+        $category->user_id = Auth::id();
+
+        return ($category->saveOrFail()) ? ['ok'=>true] : ['ok'=>false,'des'=>'Error while store value in database'];
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(Category $category)
     {
 
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Category $category)
-    {
-        //
     }
 
     /**
@@ -65,21 +76,52 @@ class CategoryController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request)
     {
-        //
+        $request->validate([
+           'id'=>'required',
+            'name'=>'required',
+            'title'=>'required',
+            'color'=>'required'
+        ]);
+
+        $input = $request->only('id','title','name','color');
+
+        $category = Category::findOrfail($input['id']);
+        $category->name = $input['name'];
+        $category->title = $input['title'];
+        $category->color = $input['color'];
+
+        return ($category->saveOrfail()) ? ['ok'=>true] : ['ok'=>false,'des'=>'Error while store value in database'];
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return void
      */
-    public function destroy(Category $category)
+    public function destroy(Request $request)
     {
-        //
+        $request->validate([
+            'id'=>'required'
+        ]);
+
+        $category = Category::findOrfail($request->input('id'));
+        return ($category->items_count > 0) ? ['ok'=>false,'des'=>'This category is not empty!'] : ['ok'=>$category->delete()];
+    }
+
+    public function increaseItemCount($id){
+        $category = Category::find($id);
+        $category->items_count += 1;
+        return ($category->save()) ? true : false;
+    }
+
+    public function decreaseItemCount($id){
+        $category = Category::find($id);
+        $category->items_count -= 1;
+        return ($category->save()) ? true : false;
     }
 }
