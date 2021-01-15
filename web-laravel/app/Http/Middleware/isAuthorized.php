@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Token;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -16,11 +17,8 @@ class isAuthorized
      */
     public function handle(Request $request, Closure $next)
     {
-        //Check is request from AJAX
-        if ($request->ajax()) {
-            return $next($request);
-        } //Check token value in header
-        else if (isset(getallheaders()['Authorization']) && getallheaders()['Authorization'] == $_ENV['API_TOKEN']) {
+        //Check token value in header
+        if (isset(getallheaders()['Authorization']) && Token::verified(getallheaders()['Authorization'])) {
             return $next($request);
         } else {
             return response()->json(['ok' => false, 'des' => "Authentication failed"], 401);
