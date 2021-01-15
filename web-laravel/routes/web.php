@@ -27,6 +27,13 @@ Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logo
 
 //Admin Panel Routes
 Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin_home')->middleware('auth');
-Route::get('/admin/wallpapers', [\App\Http\Controllers\AdminController::class, 'wallpapers'])->name('admin_wallpapers')->middleware('auth');
 
-Route::post('/admin/wallpapers',[\App\Http\Controllers\WallpaperController::class,'router']);
+//Admin Wallpaper manager routes
+Route::get('/admin/wallpapers', [\App\Http\Controllers\AdminController::class, 'wallpapers'])->name('admin_wallpapers')->middleware('auth');
+Route::post('/admin/wallpapers',[\App\Http\Controllers\WallpaperController::class,'router'])->middleware('auth');
+
+//Admin Category manager routes
+Route::get('/admin/categories',[\App\Http\Controllers\AdminController::class,'category'])->name('admin_categories')->middleware('auth');
+Route::post('/admin/categories',[\App\Http\Controllers\CategoryController::class,'router'])->middleware('auth');
+
+Route::post('/like/',[\App\Http\Controllers\WallpaperController::class,'router']);

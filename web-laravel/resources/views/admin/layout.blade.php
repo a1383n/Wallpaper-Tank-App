@@ -11,7 +11,7 @@
                 <li class="fa fa-dashboard"></li>&nbsp;Dashboard</a>
             <a href="{{route('admin_wallpapers')}}" class="list-group-item list-group-item-action bg-dark text-light">
                 <li class="fa fa-picture-o"></li>&nbsp;Wallpaper</a>
-            <a href="index.php?a=category" class="list-group-item list-group-item-action bg-dark text-light">
+            <a href="{{route('admin_categories')}}" class="list-group-item list-group-item-action bg-dark text-light">
                 <li class="fa fa-tags"></li>&nbsp;Category</a>
         </div>
     </div>
@@ -37,15 +37,24 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{\App\Models\User::find(\Illuminate\Support\Facades\Auth::id())->name}}
+                        </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Edit Profile</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Sing out</a>
+                            <form method="post" action="{{route('logout')}}">
+                                @csrf
+                                <button type="submit" class="dropdown-item">Sing out</button>
+                            </form>
                         </div>
                     </li>
                 </ul>
             </div>
+        </nav>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{route('admin_home')}}">Panel</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@yield('title')</li>
+            </ol>
         </nav>
         <div class="container content-box">
             @yield('content')
@@ -66,6 +75,7 @@
         if (document.getElementsByClassName("content-box")[0].style.marginTop == "20px") {
             document.getElementsByClassName("content-box")[0].style.marginTop = "0"
             document.getElementsByClassName("content-box")[0].style.marginBottom = "0"
+
         } else {
             document.getElementsByClassName("content-box")[0].style.marginTop = "20px"
             document.getElementsByClassName("content-box")[0].style.marginBottom = "20px"

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCategoriesTable extends Migration
+class CreateWallpaperViewsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('wallpaper_views', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('title');
-            $table->string('color',7)->default('#333333');
-            $table->bigInteger('items_count')->default(0);
-            $table->bigInteger('user_id');
+            $table->string('wallpaper_id');
+            $table->string("url");
+            $table->integer('user_id');
+            $table->string("session_id");
+            $table->string("ip");
+            $table->string("agent");
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ class CreateCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('wallpaper_views');
     }
 }

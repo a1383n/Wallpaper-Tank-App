@@ -33,6 +33,10 @@ function resetForm(formID) {
 
 function addButton() {
     resetForm("add-wallpaper-form");
+
+    $("#add-form-wallpaper-action-input").show();
+    $("#add-form-wallpaper-reset-input").show();
+
     $(".modal-title").text("Add Wallpaper");
     $("#add-form-wallpaper-action-input").val("Add");
     $("#add-form-wallpaper-action-input").val("Add");
@@ -140,6 +144,9 @@ function viewButton(id) {
 
     $("#addModal .modal-body .form-group").css("display", "none");
 
+    $("#add-form-wallpaper-action-input").hide();
+    $("#add-form-wallpaper-reset-input").hide();
+
     fetchWallpaperImage(id);
 }
 
@@ -164,6 +171,9 @@ function fetchWallpaperImage(id) {
 
 function editButton(id) {
     $("#addModal").modal("show");
+
+    $("#add-form-wallpaper-action-input").show();
+    $("#add-form-wallpaper-reset-input").show();
 
     resetForm("add-wallpaper-form");
     $(".modal-title").text("Edit Wallpaper");
@@ -270,23 +280,32 @@ function addCategory(){
     $("#add-category-name-input").val("");
     $("#add-category-color-input").val("#333333");
 
+    $(document).off("submit","#add-category-form");
     $(document).on("submit","#add-category-form",function (event) {
         if($("#add-category-action").val() == "Add") {
             event.preventDefault();
 
             const formData = new FormData();
             formData.append("name", $("#add-category-name-input").val());
+            formData.append('title', $("#add-category-name-input").val().toUpperCase())
             formData.append("color", $("#add-category-color-input").val());
 
+            formData.append('action','PUT');
+
             $.ajax({
-                url: "../api/ajax/add.php?t=category",
+                url: "",
                 type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 data: formData,
                 contentType: false,
                 processData: false,
                 success: function (responseJSON) {
-                    $("#categoryModal").modal('toggle');
-                    reloadTable();
+                    if (responseJSON['ok']) {
+                        $("#categoryModal").modal('toggle');
+                        reloadTable();
+                    }
                 }
             });
         }
@@ -297,27 +316,33 @@ function editCategory(id){
     $("#categoryModal").modal("show");
     $("#add-category-action").val("Edit");
     $.ajax({
-        url: "../api/ajax/fetch.php?t=category&id="+id,
+        url: "/api/categories/"+id,
         type: "GET",
         contentType:false,
         processData: false,
         success: function (responseJSON) {
-            $("#add-category-name-input").val(responseJSON["data"]["name"]);
-            $("#add-category-color-input").val(responseJSON["data"]["color"]);
+            $("#add-category-name-input").val(responseJSON["name"]);
+            $("#add-category-color-input").val(responseJSON["color"]);
         }
     });
 
+    $(document).off("submit","#add-category-form");
     $(document).on("submit","#add-category-form",function (event) {
         event.preventDefault();
         if ($("#add-category-action").val() == "Edit"){
             const formData = new FormData();
             formData.append("id",id);
             formData.append("name",$("#add-category-name-input").val());
+            formData.append('title',$('#add-category-name-input').val().toUpperCase());
             formData.append("color",$("#add-category-color-input").val());
+            formData.append('action','EDIT');
 
             $.ajax({
-                url: "../api/ajax/edit.php?t=category",
+                url: "",
                 type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 data: formData,
                 contentType:false,
                 processData: false,
@@ -334,9 +359,16 @@ function editCategory(id){
 
 function deleteCategory(id){
     if (confirm("Are you sure you want delete this row?")){
+        const formData = new FormData();
+        formData.append('id',id);
+        formData.append('action','DELETE');
         $.ajax({
-            url: "../api/ajax/delete.php?t=category&id="+id,
-            type: "GET",
+            url: "",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: "POST",
+            data: formData,
             contentType: false,
             processData: false,
             success: function (responseJSON) {

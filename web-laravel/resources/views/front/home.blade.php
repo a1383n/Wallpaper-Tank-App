@@ -2,9 +2,14 @@
 
 @section('title','Home')
 
+@if(isset($search_value))
+    @section('search_value',$search_value)
+@endif
+
 @section('content')
+    <div class="row row-cols-1 row-cols-md-3">
 @foreach($data as $wallpaper)
-    <div class="container-style" onclick="window.open('{{route('single_wallpaper',['id'=>$wallpaper->id])}}','_parent')">
+    <div class="container-style col" onclick="window.open('{{route('single_wallpaper',['id'=>$wallpaper->id])}}','_parent')">
         <div class="img-container">
             <img src="{{$wallpaper->temp_url}}" alt="{{$wallpaper->title}}">
         </div>
@@ -18,4 +23,5 @@
         </div>
     </div>
 @endforeach
+    </div>
 @endsection

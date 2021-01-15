@@ -9983,16 +9983,18 @@ body {
 a {
     text-decoration: none;
 }
-
+a:hover{
+    text-decoration: none;
+}
 .container-style {
     position: relative;
     height: 500px;
     width: 350px;
-    margin-right: 20px;
     overflow: hidden;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
     transition: box-shadow 0.3s ease-out;
     cursor: pointer;
+    margin-bottom: 15px;
 }
 
 .container-style:hover {
@@ -10151,5 +10153,27 @@ a {
     transition: 0.3s;
     background: #ffffff;
 }
-
+@media only screen and (max-width: 960px) {
+    .row{
+        padding: 15px;
+        justify-content: center;
+    }
+    .box-image{
+        width: 100%;
+    }
+    .card{
+        margin-bottom: 15px;
+    }
+    .box-body{
+        width: unset;
+        background: #FFFFFF;
+    }
+    .box-title .btn{
+        float: unset !important;
+        width: 43%;
+    }
+}
+.card{
+    margin-right: 15px;
+}
 
