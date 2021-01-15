@@ -15,7 +15,7 @@ class WallpapersDownload extends Model
      * @param $id wallpaper_id
      * @return bool Result
      */
-    public static function isUserLiked($id){
+    public static function isUserDownloaded($id){
         return sizeof(WallpapersDownload::where('session_id',Request::getSession()->getId())->where('wallpaper_id',$id)->get()) > 0;
     }
 
@@ -25,7 +25,7 @@ class WallpapersDownload extends Model
      */
     public static function increase(Wallpaper $wallpaper){
         // if user dont download wallpaper
-        if (!self::isUserLiked($wallpaper->id)){
+        if (!self::isUserDownloaded($wallpaper->id)){
             $likeLog = new WallpapersDownload();
             $likeLog->session_id = Request::getSession()->getId();
             $likeLog->wallpaper_id = $wallpaper->id;
