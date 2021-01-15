@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Wallpaper;
 use App\Models\WallpaperLikes;
+use App\Models\WallpapersDownload;
 use App\Models\WallpaperViews;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +44,9 @@ class WallpaperController extends Controller
                 break;
             case 'DECREASE':
                 return $this->decreaseLike($request->input('id'));
+            case 'DOWNLOAD':
+                return ['ok'=>WallpapersDownload::increase(Wallpaper::find($request->input('id')))];
+                break;
         }
     }
 
@@ -159,9 +163,22 @@ class WallpaperController extends Controller
 
         $wallpaper = Wallpaper::findOrfail($request->input('id'));
         $wallpaper->title = $request->input('title');
+
+        //Decrease old category items count
+        $category = Category::find($wallpaper->category_id);
+        if ($category->items_count > 0){
+            $category->items_count--;
+        }
+        $category->save();
+
         $wallpaper->category_id = $request->input('category_id');
         $wallpaper->tags = $request->input('tags');
         $wallpaper->save();
+
+        // Increase new category items count
+        $category = Category::find($request->input('category_id'));
+        $category->items_count++;
+        $category->save();
 
         return ['ok' => true];
     }

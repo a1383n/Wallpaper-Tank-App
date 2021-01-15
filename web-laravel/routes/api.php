@@ -15,6 +15,10 @@ use App\Models\Category;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('/getToken',function (Request $request){
+    return $request;
+});
+
 
 Route::get('/wallpapers', function (Request $request) {
     $wallpapers = Wallpaper::get();
@@ -25,7 +29,7 @@ Route::get('/wallpapers', function (Request $request) {
             array_push($data, [
                 $wallpaper->id,
                 $wallpaper->title,
-                Category::find($wallpaper->category_id)->title,
+                Category::find($wallpaper->category_id)->name,
                 $wallpaper->tags,
                 '<li class="fa fa-heart"></li>&nbsp;<span>' . $wallpaper->likes . '</span><br>' .
                 '<li class="fa fa-eye"></li>&nbsp;<span>' . $wallpaper->views . '</span><br>' .
