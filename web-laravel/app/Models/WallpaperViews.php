@@ -13,14 +13,16 @@ class WallpaperViews extends Model
     use HasFactory;
 
     public static function createViewLog(Wallpaper $wallpaper){
-        $before = WallpaperViews::where('session_id',Request::getSession()->getId())->where('wallpaper_id',$wallpaper->id)->get();
+        $before = (Request::getSession())
+            ? WallpaperViews::where('session_id',Request::getSession()->getId())->where('wallpaper_id',$wallpaper->id)->get()
+            : WallpaperViews::where('session_id',Request::header('Authorization'))->where('wallpaper_id',$wallpaper->id)->get();
 
         if (sizeof($before) == 0){
 
             $wallpaperView = new WallpaperViews();
             $wallpaperView->wallpaper_id = $wallpaper->id;
             $wallpaperView->url = Request::url();
-            $wallpaperView->session_id = Request::getSession()->getId();
+            $wallpaperView->session_id = (Request::getSession()) ? Request::getSession()->getId() : Request::header('Authorization');
             $wallpaperView->user_id = (Auth::check()) ? Auth::id() : 0;
             $wallpaperView->ip = Request::ip();
             $wallpaperView->agent = Request::userAgent();

@@ -44,7 +44,6 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name'=>'required',
-            'title'=>'required',
             'color'=>'required'
         ]);
 
@@ -52,11 +51,15 @@ class CategoryController extends Controller
 
         $category = new Category();
         $category->name = $input['name'];
-        $category->title = $input['title'];
+        $category->title = null;
         $category->color = $input['color'];
         $category->user_id = Auth::id();
 
-        return ($category->saveOrFail()) ? ['ok'=>true] : ['ok'=>false,'des'=>'Error while store value in database'];
+        if (sizeof(Category::where('name',$input['name'])->get()) == 0) {
+            return ($category->saveOrFail()) ? ['ok' => true] : ['ok' => false, 'des' => 'Error while store value in database'];
+        }else{
+            return ['ok'=>false,'des'=>'Category is duplicate!'];
+        }
     }
 
     /**
@@ -83,7 +86,6 @@ class CategoryController extends Controller
         $request->validate([
            'id'=>'required',
             'name'=>'required',
-            'title'=>'required',
             'color'=>'required'
         ]);
 
@@ -91,11 +93,14 @@ class CategoryController extends Controller
 
         $category = Category::findOrfail($input['id']);
         $category->name = $input['name'];
-        $category->title = $input['title'];
+        $category->title = null;
         $category->color = $input['color'];
 
-        return ($category->saveOrfail()) ? ['ok'=>true] : ['ok'=>false,'des'=>'Error while store value in database'];
-    }
+        if (sizeof(Category::where('name',$input['name'])->get()) == 0) {
+            return ($category->saveOrFail()) ? ['ok' => true] : ['ok' => false, 'des' => 'Error while store value in database'];
+        }else{
+            return ['ok'=>false,'des'=>'Category is duplicate!'];
+        }    }
 
     /**
      * Remove the specified resource from storage.
