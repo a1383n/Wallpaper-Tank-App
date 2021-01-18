@@ -49,8 +49,28 @@ Route::get('/wallpapers', function (Request $request) {
 
         return ['draw' => $request->input('_'), 'recordsTotal' => sizeof($wallpapers), 'data' => $data];
     } else {
-        return $wallpapers;
-    }
+        $data = array();
+        foreach ($wallpapers as $wallpaper) {
+            array_push($data, [
+               'id'=>$wallpaper->id,
+			   'title'=>$wallpaper->title,
+			   'category'=>Category::find($wallpaper->category_id),
+			   'tags'=>$wallpaper->tags,
+			   'likes'=>$wallpaper->likes,
+			   'views'=>$wallpaper->views,
+			   'downloads'=>$wallpaper->downloads,
+			   'user_id'=>$wallpaper->user_id,
+			   'path'=>$wallpaper->path,
+			   'temp_url'=>$wallpaper->temp_url,
+			   'wallpaper_url'=>$wallpaper->wallpaper_url,
+			   'created_at'=>$wallpaper->created_at,
+			   'updated_at'=>$wallpaper->updated_at
+            ]);
+        }
+
+        return $data;
+    }    
+
 });
 
 Route::get('wallpapers/{id}', function ($id) {
@@ -106,7 +126,31 @@ Route::get('categories/{id}', function ($id) {
 });
 
 Route::get('categories/{id}/wallpapers',function ($id){
-    $result = Wallpaper::where('category_id', Category::findOrfail($id)->id)->get();
-    return ['ok'=>true,'data'=>$result];
+    $wallpapers = Wallpaper::where('category_id', Category::findOrfail($id)->id)->get();
+    $data = array();
+    foreach ($wallpapers as $wallpaper) {
+        array_push($data, [
+           'id'=>$wallpaper->id,
+           'title'=>$wallpaper->title,
+           'category'=>Category::find($wallpaper->category_id),
+           'tags'=>$wallpaper->tags,
+           'likes'=>$wallpaper->likes,
+           'views'=>$wallpaper->views,
+           'downloads'=>$wallpaper->downloads,
+           'user_id'=>$wallpaper->user_id,
+           'path'=>$wallpaper->path,
+           'temp_url'=>$wallpaper->temp_url,
+           'wallpaper_url'=>$wallpaper->wallpaper_url,
+           'created_at'=>$wallpaper->created_at,
+           'updated_at'=>$wallpaper->updated_at
+        ]);
+    }
+
+    return $data;
 })->where('id','[0-9]+');
 
+Route::get('symlink',function (){
+$targetFolder = $_SERVER['DOCUMENT_ROOT'] . '/../storage/app/public';
+$linkFolder = $_SERVER['DOCUMENT_ROOT'] . '/storage';
+symlink($targetFolder, $linkFolder) or die("error creating symlink");
+echo 'Symlink process successfully completed';});

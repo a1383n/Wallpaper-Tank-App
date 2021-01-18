@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -22,10 +23,18 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.util.List;
+
 import ir.amirsobhan.wallpaperapp.Adapter.MainViewPagerAdapter;
 import ir.amirsobhan.wallpaperapp.Firebase.Config;
 import ir.amirsobhan.wallpaperapp.Firebase.NotificationUtils;
+import ir.amirsobhan.wallpaperapp.Model.Wallpaper;
+import ir.amirsobhan.wallpaperapp.Retrofit.ApiInterface;
+import ir.amirsobhan.wallpaperapp.Retrofit.RetrofitClient;
 import ir.amirsobhan.wallpaperapp.UI.BottomNavigationBehavior;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigationView;
@@ -38,25 +47,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        switch (preferences.getString("theme", "Light")) {
-            case "Light":
-                setTheme(R.style.AppTheme);
-                break;
-            case "Dark":
-                setTheme(R.style.DarkTheme);
-                break;
-            case "System Default":
-                switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
-                    case Configuration.UI_MODE_NIGHT_YES:
-                        setTheme(R.style.DarkTheme);
-                        break;
-                    case Configuration.UI_MODE_NIGHT_NO:
-                        setTheme(R.style.AppTheme);
-                        break;
-                }
-                break;
-        }
+
+        applyTheme();
 
         setContentView(R.layout.activity_main);
         // Initialization Views
@@ -147,6 +139,29 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
+    private void applyTheme(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        switch (preferences.getString("theme", "Light")) {
+            case "Light":
+                setTheme(R.style.AppTheme);
+                break;
+            case "Dark":
+                setTheme(R.style.DarkTheme);
+                break;
+            case "System Default":
+                switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+                    case Configuration.UI_MODE_NIGHT_YES:
+                        setTheme(R.style.DarkTheme);
+                        break;
+                    case Configuration.UI_MODE_NIGHT_NO:
+                        setTheme(R.style.AppTheme);
+                        break;
+                }
+                break;
+        }
+
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -167,7 +182,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
     }
 }

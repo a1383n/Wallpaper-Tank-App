@@ -1,12 +1,17 @@
 package ir.amirsobhan.wallpaperapp;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
@@ -15,32 +20,28 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ir.amirsobhan.wallpaperapp.Adapter.WallpaperAdapter;
 import ir.amirsobhan.wallpaperapp.Model.Category;
 import ir.amirsobhan.wallpaperapp.Model.Wallpaper;
+import ir.amirsobhan.wallpaperapp.Retrofit.ApiInterface;
+import ir.amirsobhan.wallpaperapp.Retrofit.RetrofitClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CategoryActivity extends AppCompatActivity {
     private Category category;
     private RecyclerView recyclerView;
     private WallpaperAdapter adapter;
-    private List<Wallpaper> list = new ArrayList<>();
+    private ApiInterface apiInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +62,8 @@ public class CategoryActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolBarLayout = findViewById(R.id.toolbar_layout);
-        toolBarLayout.setTitle(category.getTitle());
-        getSupportActionBar().setTitle(category.getTitle());
+        toolBarLayout.setTitle(category.getName());
+        getSupportActionBar().setTitle(category.getName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolBarLayout.setContentScrimColor(Color.parseColor(category.getColor()));
         findViewById(R.id.app_bar).setBackgroundColor(Color.parseColor(category.getColor()));
@@ -84,6 +85,8 @@ public class CategoryActivity extends AppCompatActivity {
         }
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        apiInterface = RetrofitClient.getApiInterface();
     }
 
     private void applyTheme() {
@@ -109,43 +112,44 @@ public class CategoryActivity extends AppCompatActivity {
     }
 
     private void getCategoryWallpaper() {
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        String url = "https://amirsobhan.ir/wallpaper/api/web/getWallpapers";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Type type = new TypeToken<ArrayList<Wallpaper>>() {
-                }.getType();
-                list = new Gson().fromJson(response, type);
+      apiInterface.getWallpaperWhereCategory(category.getId()).enqueue(new Callback<List<Wallpaper>>() {
+          @Override
+          public void onResponse(Call<List<Wallpaper>> call, Response<List<Wallpaper>> response) {
+              if (response.isSuccessful()){
+                  adapter = new WallpaperAdapter(getApplicationContext(),response.body());
+                  recyclerView.setAdapter(adapter);
+                  recyclerView.setVisibility(View.VISIBLE);
+              }else{
+                  Toast.makeText(CategoryActivity.this, response.errorBody().toString(), Toast.LENGTH_SHORT).show();
+              }
+          }
 
-                adapter = new WallpaperAdapter(getApplicationContext(), list);
+          @Override
+          public void onFailure(Call<List<Wallpaper>> call, Throwable t) {
 
-                recyclerView.setAdapter(adapter);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+              Log.d("TAG",t.getMessage());
 
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                //Send Authentication in header
-                params.put("Authentication", "123456789");
-
-                return params;
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("category", category.getName());
-
-                return params;
-            }
-        };
-        requestQueue.add(stringRequest);
+              MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(CategoryActivity.this)
+                      .setTitle("Server not responding")
+                      .setMessage("Check your connection and try again")
+                      .setCancelable(false)
+                      .setIcon(R.drawable.ic_baseline_wifi_off_24)
+                      .setPositiveButton("try again", new DialogInterface.OnClickListener() {
+                          @Override
+                          public void onClick(DialogInterface dialog, int which) {
+                              getCategoryWallpaper();
+                          }
+                      })
+                      .setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                          @Override
+                          public void onClick(DialogInterface dialog, int which) {
+                              finish();
+                          }
+                      });
+              AlertDialog alertDialog = dialogBuilder.create();
+              alertDialog.show();
+          }
+      });
     }
 
     @Override

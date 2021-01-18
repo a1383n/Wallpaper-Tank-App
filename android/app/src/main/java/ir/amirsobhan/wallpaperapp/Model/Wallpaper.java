@@ -1,3 +1,4 @@
+
 package ir.amirsobhan.wallpaperapp.Model;
 
 import com.google.gson.annotations.Expose;
@@ -7,70 +8,49 @@ public class Wallpaper {
 
     @SerializedName("id")
     @Expose
-    private int id;
+    private Integer id;
     @SerializedName("title")
     @Expose
     private String title;
     @SerializedName("category")
     @Expose
-    private String category;
+    private Category category;
     @SerializedName("tags")
     @Expose
     private String tags;
     @SerializedName("likes")
     @Expose
-    private int likes;
+    private Integer likes;
     @SerializedName("views")
     @Expose
-    private int views;
+    private Integer views;
     @SerializedName("downloads")
     @Expose
-    private int downloads;
-    @SerializedName("author")
+    private Integer downloads;
+    @SerializedName("user_id")
     @Expose
-    private String author;
+    private Integer userId;
     @SerializedName("path")
     @Expose
     private String path;
-    @SerializedName("temp")
+    @SerializedName("temp_url")
     @Expose
-    private String temp;
-    @SerializedName("wallpaper")
+    private String tempUrl;
+    @SerializedName("wallpaper_url")
     @Expose
-    private String wallpaper;
+    private String wallpaperUrl;
+    @SerializedName("created_at")
+    @Expose
+    private String createdAt;
+    @SerializedName("updated_at")
+    @Expose
+    private String updatedAt;
 
-    public Wallpaper(int id, String title, String category, String tags, int likes, int views, int downloads, String author, String path, String temp, String wallpaper) {
-        this.id = id;
-        this.title = title;
-        this.category = category;
-        this.tags = tags;
-        this.likes = likes;
-        this.views = views;
-        this.downloads = downloads;
-        this.author = author;
-        this.path = path;
-        this.temp = temp;
-        this.wallpaper = wallpaper;
-    }
-
-    public Wallpaper(String title, String category, String tags, int likes, int views, int downloads, String author, String path, String temp, String wallpaper) {
-        this.title = title;
-        this.category = category;
-        this.tags = tags;
-        this.likes = likes;
-        this.views = views;
-        this.downloads = downloads;
-        this.author = author;
-        this.path = path;
-        this.temp = temp;
-        this.wallpaper = wallpaper;
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -82,6 +62,14 @@ public class Wallpaper {
         this.title = title;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     public String getTags() {
         return tags;
     }
@@ -90,36 +78,36 @@ public class Wallpaper {
         this.tags = tags;
     }
 
-    public int getLikes() {
+    public Integer getLikes() {
         return likes;
     }
 
-    public void setLikes(int likes) {
+    public void setLikes(Integer likes) {
         this.likes = likes;
     }
 
-    public int getViews() {
+    public Integer getViews() {
         return views;
     }
 
-    public void setViews(int views) {
+    public void setViews(Integer views) {
         this.views = views;
     }
 
-    public int getDownloads() {
+    public Integer getDownloads() {
         return downloads;
     }
 
-    public void setDownloads(int downloads) {
+    public void setDownloads(Integer downloads) {
         this.downloads = downloads;
     }
 
-    public String getAuthor() {
-        return author;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getPath() {
@@ -130,27 +118,36 @@ public class Wallpaper {
         this.path = path;
     }
 
-    public String getTemp() {
-        return temp;
+    public String getTempUrl() {
+        return tempUrl;
     }
 
-    public void setTemp(String temp) {
-        this.temp = temp;
+    public void setTempUrl(String tempUrl) {
+        this.tempUrl = tempUrl;
     }
 
-    public String getWallpaper() {
-        return wallpaper;
+    public String getWallpaperUrl() {
+        return wallpaperUrl;
     }
 
-    public void setWallpaper(String wallpaper) {
-        this.wallpaper = wallpaper;
+    public void setWallpaperUrl(String wallpaperUrl) {
+        this.wallpaperUrl = wallpaperUrl;
     }
 
-    public String getCategory() {
-        return category;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
 }

@@ -51,7 +51,14 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Date;
 
+import ir.amirsobhan.wallpaperapp.Databases.WallpaperDB;
+import ir.amirsobhan.wallpaperapp.Model.ApiResult;
 import ir.amirsobhan.wallpaperapp.Model.Wallpaper;
+import ir.amirsobhan.wallpaperapp.Retrofit.ApiInterface;
+import ir.amirsobhan.wallpaperapp.Retrofit.RetrofitClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class WallpaperSetActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
@@ -68,6 +75,9 @@ public class WallpaperSetActivity extends AppCompatActivity {
     private MaterialAlertDialogBuilder setDialog;
     private final String[] setDialogListItem = new String[]{"Home Screen", "Lock Screen", "Both", "Save to gallery"};
     private int setDialogListSelect = 0;
+    private ApiInterface apiInterface;
+    private WallpaperDB db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,12 +90,12 @@ public class WallpaperSetActivity extends AppCompatActivity {
 
         //Set bottomSheet textViews values
         sheetTitle.setText(wallpaper.getTitle());
-        sheetCategory.setText(wallpaper.getCategory());
+        sheetCategory.setText(wallpaper.getCategory().getName());
         sheetViews.setText(wallpaper.getViews() + "");
         sheetDownloads.setText(wallpaper.getDownloads() + "");
 
         //Set source wallpaper
-        Glide.with(this).load(wallpaper.getWallpaper())
+        Glide.with(this).load(wallpaper.getWallpaperUrl())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .addListener(new RequestListener<Drawable>() {
                     @Override
@@ -163,6 +173,9 @@ public class WallpaperSetActivity extends AppCompatActivity {
 
         sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
+        apiInterface = RetrofitClient.getApiInterface();
+
+        db = new WallpaperDB(this);
     }
 
     private void applyTheme() {
@@ -369,6 +382,9 @@ public class WallpaperSetActivity extends AppCompatActivity {
 
     private void setWallpaper(int flag) {
         WallpaperManager wallpaperManager = (WallpaperManager) getSystemService(WALLPAPER_SERVICE);
+
+        sendDownloadStatusToServer(wallpaper.getId());
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if (wallpaperManager.isSetWallpaperAllowed()){
                 try {
@@ -394,11 +410,35 @@ public class WallpaperSetActivity extends AppCompatActivity {
     }
 
     private void saveWallpaper(){
+        sendDownloadStatusToServer(wallpaper.getId());
+
         MediaStore.Images.Media.insertImage(getContentResolver(),getImageBitmap(),wallpaper.getTitle(),new Date().toString());
     }
 
     private Bitmap getImageBitmap(){
         BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
         return bitmapDrawable.getBitmap();
+    }
+
+    private void sendDownloadStatusToServer(int id){
+        apiInterface.download(RetrofitClient.getAuthorizationToken(this),id).enqueue(new Callback<ApiResult>() {
+            @Override
+            public void onResponse(Call<ApiResult> call, Response<ApiResult> response) {
+                if (response.isSuccessful()){
+                    if (response.body().getOk()) {
+                        db.setDownloaded(id);
+                        wallpaper.setDownloads(wallpaper.getDownloads() + 1);
+                        sheetDownloads.setText(wallpaper.getDownloads() + "");
+                    }
+                }
+                Log.d("Download",response.message());
+            }
+
+            @Override
+            public void onFailure(Call<ApiResult> call, Throwable t) {
+                Log.d("Download",t.toString());
+
+            }
+        });
     }
 }

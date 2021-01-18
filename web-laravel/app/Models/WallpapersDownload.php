@@ -16,7 +16,11 @@ class WallpapersDownload extends Model
      * @return bool Result
      */
     public static function isUserDownloaded($id){
-        return sizeof(WallpapersDownload::where('session_id',Request::getSession()->getId())->where('wallpaper_id',$id)->get()) > 0;
+        if(Request::getSession()) {
+            return sizeof(WallpapersDownload::where('session_id', Request::getSession()->getId())->where('wallpaper_id', $id)->get()) > 0;
+        }else{
+            return sizeof(WallpapersDownload::where('session_id',Request::header('Authorization'))->where('wallpaper_id', $id)->get()) > 0;
+        }    
     }
 
     /**
@@ -27,7 +31,7 @@ class WallpapersDownload extends Model
         // if user dont download wallpaper
         if (!self::isUserDownloaded($wallpaper->id)){
             $likeLog = new WallpapersDownload();
-            $likeLog->session_id = Request::getSession()->getId();
+            $likeLog->session_id = (Request::getSession()) ? Request::getSession()->getId() : Request::header('Authorization');
             $likeLog->wallpaper_id = $wallpaper->id;
             $likeLog->save();
 

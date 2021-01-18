@@ -2,29 +2,26 @@ package ir.amirsobhan.wallpaperapp.Firebase;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import ir.amirsobhan.wallpaperapp.MainActivity;
+import ir.amirsobhan.wallpaperapp.Model.ApiResult;
+import ir.amirsobhan.wallpaperapp.Retrofit.ApiInterface;
+import ir.amirsobhan.wallpaperapp.Retrofit.RetrofitClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -151,38 +148,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void sendRegistrationToServer(final String token) {
-        // sending gcm token to server
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        String url = "https://amirsobhan.ir/wallpaper/api/web/newToken";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        ApiInterface apiInterface = RetrofitClient.getApiInterface();
 
-            }
-        }, new Response.ErrorListener() {
+        apiInterface.newToken(Config.PRIVATE_KEY,token).enqueue(new Callback<ApiResult>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                //Send Authentication in header
-                params.put("Authentication", "123456789");
-
-                return params;
+            public void onResponse(Call<ApiResult> call, Response<ApiResult> response) {
+                if (response.code() == 200 && response.body().getOk()) {
+                   RetrofitClient.storeAuthorizationToken(getApplicationContext(),response.body().getToken());
+                }
             }
 
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("token", token);
-
-                return params;
+            public void onFailure(Call<ApiResult> call, Throwable t) {
+                 Log.d("Token","Error:"+t.getMessage());
             }
-        };
-        queue.add(stringRequest);
+        });
     }
 
 }

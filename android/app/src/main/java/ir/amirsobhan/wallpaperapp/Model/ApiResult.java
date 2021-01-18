@@ -8,9 +8,9 @@ public class ApiResult {
     @SerializedName("ok")
     @Expose
     private Boolean ok;
-    @SerializedName("code")
+    @SerializedName("token")
     @Expose
-    private Integer code;
+    private String token;
     @SerializedName("des")
     @Expose
     private String des;
@@ -23,12 +23,12 @@ public class ApiResult {
         this.ok = ok;
     }
 
-    public Integer getCode() {
-        return code;
+    public String getToken() {
+        return token;
     }
 
-    public void setCode(Integer code) {
-        this.code = code;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getDes() {
@@ -39,4 +39,12 @@ public class ApiResult {
         this.des = des;
     }
 
+    @Override
+    public String toString() {
+        return "ApiResult{" +
+                "ok=" + ok +
+                ", token='" + token + '\'' +
+                ", des='" + des + '\'' +
+                '}';
+    }
 }
