@@ -39,12 +39,20 @@ import ir.amirsobhan.wallpaperapp.Adapter.WallpaperAdapter;
 import ir.amirsobhan.wallpaperapp.Databases.WallpaperDB;
 import ir.amirsobhan.wallpaperapp.Model.Wallpaper;
 import ir.amirsobhan.wallpaperapp.R;
+<<<<<<< Updated upstream
+=======
+import ir.amirsobhan.wallpaperapp.Retrofit.ApiInterface;
+import ir.amirsobhan.wallpaperapp.Retrofit.RetrofitClient;
+import ir.amirsobhan.wallpaperapp.UI.ThemeManager;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+>>>>>>> Stashed changes
 
 public class HomeFragment extends Fragment {
     RecyclerView recyclerView;
     ProgressBar progressBar;
     WallpaperAdapter adapter;
-    List<Wallpaper> wallpaperList = new ArrayList<Wallpaper>();
     WallpaperDB db;
     SwipeRefreshLayout refreshLayout;
     @Override
@@ -124,6 +132,7 @@ public class HomeFragment extends Fragment {
 
                 //Show recyclerView
                 progressBar.setVisibility(View.GONE);
+<<<<<<< Updated upstream
                 recyclerView.setVisibility(View.VISIBLE);
 
                 //Stop refreshing
@@ -136,10 +145,44 @@ public class HomeFragment extends Fragment {
                         BottomNavigationView navigationView = getActivity().findViewById(R.id.bottom_navigation);
                         navigationView.getOrCreateBadge(R.id.menu_home).setNumber(navigationView.getOrCreateBadge(R.id.menu_home).getNumber()+1);
                     }
+=======
+                refreshLayout.setRefreshing(false);
+
+                // Check if token is null send request to get it again
+                if (RetrofitClient.getAuthorizationToken(getContext()) == null){
+                    FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                Log.w("token", "Fetching FCM registration token failed", task.getException());
+                                return;
+                            }
+
+                            // Get FCM registration token
+                            String token = task.getResult();
+
+                            //Send to server
+                            apiInterface.newToken(Config.PRIVATE_KEY,token).enqueue(new Callback<ApiResult>() {
+                                @Override
+                                public void onResponse(Call<ApiResult> call, Response<ApiResult> response) {
+                                    if (response.code() == 200 && response.body().getOk()) {
+                                        RetrofitClient.storeAuthorizationToken(getContext(),response.body().getToken());
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<ApiResult> call, Throwable t) {
+                                   RetrofitClient.storeAuthorizationToken(getContext(),null);
+                                }
+                            });
+                        }
+                    });
+>>>>>>> Stashed changes
                 }
             }
         }, new Response.ErrorListener() {
             @Override
+<<<<<<< Updated upstream
             public void onErrorResponse(VolleyError error) {
                 MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
                         .setTitle("Server not responding")
@@ -160,6 +203,15 @@ public class HomeFragment extends Fragment {
                         });
                 AlertDialog dialog = dialogBuilder.create();
                 dialog.show();
+=======
+            public void onFailure(Call<List<Wallpaper>> call, Throwable t) {
+                ThemeManager.getNetworkErrorDialog(getActivity(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getWallpaperList();
+                    }
+                });
+>>>>>>> Stashed changes
             }
         }) {
             @Override

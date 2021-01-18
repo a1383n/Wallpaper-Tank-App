@@ -26,18 +26,24 @@ import ir.amirsobhan.wallpaperapp.Adapter.MainViewPagerAdapter;
 import ir.amirsobhan.wallpaperapp.Firebase.Config;
 import ir.amirsobhan.wallpaperapp.Firebase.NotificationUtils;
 import ir.amirsobhan.wallpaperapp.UI.BottomNavigationBehavior;
+<<<<<<< Updated upstream
+=======
+import ir.amirsobhan.wallpaperapp.UI.ThemeManager;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+>>>>>>> Stashed changes
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigationView;
     private ViewPager viewPager;
-
-    private static final String TAG = MainActivity.class.getSimpleName();
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< Updated upstream
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         switch (preferences.getString("theme", "Light")) {
             case "Light":
@@ -58,7 +64,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
+=======
+        // Set Activity Theme
+        setTheme(ThemeManager.getTheme(this));
+>>>>>>> Stashed changes
         setContentView(R.layout.activity_main);
+
         // Initialization Views
         Initialization();
 
@@ -124,24 +135,18 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.main_viewpager);
         viewPager.setAdapter(new MainViewPagerAdapter(getSupportFragmentManager()));
 
+        // Start FirebaseAnalytics Service
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+        // subscribe to global topic
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-
                 // checking for type intent filter
                 if (intent.getAction().equals(Config.REGISTRATION_COMPLETE)) {
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
                     FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
-
-                } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
                 }
             }
         };

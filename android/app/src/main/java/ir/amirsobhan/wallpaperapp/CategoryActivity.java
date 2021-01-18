@@ -35,6 +35,15 @@ import java.util.Map;
 import ir.amirsobhan.wallpaperapp.Adapter.WallpaperAdapter;
 import ir.amirsobhan.wallpaperapp.Model.Category;
 import ir.amirsobhan.wallpaperapp.Model.Wallpaper;
+<<<<<<< Updated upstream
+=======
+import ir.amirsobhan.wallpaperapp.Retrofit.ApiInterface;
+import ir.amirsobhan.wallpaperapp.Retrofit.RetrofitClient;
+import ir.amirsobhan.wallpaperapp.UI.ThemeManager;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+>>>>>>> Stashed changes
 
 public class CategoryActivity extends AppCompatActivity {
     private Category category;
@@ -45,13 +54,15 @@ public class CategoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        applyTheme();
+        // Set Activity Theme
+        setTheme(ThemeManager.getTheme(this));
         setContentView(R.layout.activity_category);
+
+        // Get json from Intent and convert to Category
         Type type = new TypeToken<Category>() {
         }.getType();
         category = new Gson().fromJson(getIntent().getStringExtra("json"), type);
 
-        // Initialization
         Initialization();
 
         getCategoryWallpaper();
@@ -66,7 +77,6 @@ public class CategoryActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolBarLayout.setContentScrimColor(Color.parseColor(category.getColor()));
         findViewById(R.id.app_bar).setBackgroundColor(Color.parseColor(category.getColor()));
-
         recyclerView = findViewById(R.id.category_wallpaper_recycler);
 
         //Setup layoutManager
@@ -86,29 +96,11 @@ public class CategoryActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
-    private void applyTheme() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        switch (preferences.getString("theme", "Light")) {
-            case "Light":
-                setTheme(R.style.AppTheme);
-                break;
-            case "Dark":
-                setTheme(R.style.DarkTheme);
-                break;
-            case "System Default":
-                switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
-                    case Configuration.UI_MODE_NIGHT_YES:
-                        setTheme(R.style.DarkTheme);
-                        break;
-                    case Configuration.UI_MODE_NIGHT_NO:
-                        setTheme(R.style.AppTheme);
-                        break;
-                }
-                break;
-        }
-    }
-
+    /**
+     * Get Wallpapers in this category from server
+     */
     private void getCategoryWallpaper() {
+<<<<<<< Updated upstream
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         String url = "https://amirsobhan.ir/wallpaper/api/web/getWallpapers";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -146,6 +138,32 @@ public class CategoryActivity extends AppCompatActivity {
             }
         };
         requestQueue.add(stringRequest);
+=======
+      apiInterface.getWallpaperWhereCategory(category.getId()).enqueue(new Callback<List<Wallpaper>>() {
+          @Override
+          public void onResponse(Call<List<Wallpaper>> call, Response<List<Wallpaper>> response) {
+              if (response.isSuccessful()){
+                  //Put response to adapter and set to recyclerview
+                  adapter = new WallpaperAdapter(getApplicationContext(),response.body());
+                  recyclerView.setAdapter(adapter);
+                  recyclerView.setVisibility(View.VISIBLE);
+              }else{
+                  Toast.makeText(CategoryActivity.this, response.errorBody().toString(), Toast.LENGTH_SHORT).show();
+              }
+          }
+
+          @Override
+          public void onFailure(Call<List<Wallpaper>> call, Throwable t) {
+              //Show ErrorDialog
+              ThemeManager.getNetworkErrorDialog(CategoryActivity.this, new DialogInterface.OnClickListener() {
+                  @Override
+                  public void onClick(DialogInterface dialog, int which) {
+                      getCategoryWallpaper();
+                  }
+              }).show();
+          }
+      });
+>>>>>>> Stashed changes
     }
 
     @Override
