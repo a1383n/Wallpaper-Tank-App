@@ -33,6 +33,7 @@ import ir.amirsobhan.wallpaperapp.Model.Category;
 import ir.amirsobhan.wallpaperapp.Model.Wallpaper;
 import ir.amirsobhan.wallpaperapp.Retrofit.ApiInterface;
 import ir.amirsobhan.wallpaperapp.Retrofit.RetrofitClient;
+import ir.amirsobhan.wallpaperapp.UI.ThemeManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,7 +47,9 @@ public class CategoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        applyTheme();
+
+        setTheme(ThemeManager.getTheme(this));
+
         setContentView(R.layout.activity_category);
         Type type = new TypeToken<Category>() {
         }.getType();
@@ -89,28 +92,6 @@ public class CategoryActivity extends AppCompatActivity {
         apiInterface = RetrofitClient.getApiInterface();
     }
 
-    private void applyTheme() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        switch (preferences.getString("theme", "Light")) {
-            case "Light":
-                setTheme(R.style.AppTheme);
-                break;
-            case "Dark":
-                setTheme(R.style.DarkTheme);
-                break;
-            case "System Default":
-                switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
-                    case Configuration.UI_MODE_NIGHT_YES:
-                        setTheme(R.style.DarkTheme);
-                        break;
-                    case Configuration.UI_MODE_NIGHT_NO:
-                        setTheme(R.style.AppTheme);
-                        break;
-                }
-                break;
-        }
-    }
-
     private void getCategoryWallpaper() {
       apiInterface.getWallpaperWhereCategory(category.getId()).enqueue(new Callback<List<Wallpaper>>() {
           @Override
@@ -126,28 +107,12 @@ public class CategoryActivity extends AppCompatActivity {
 
           @Override
           public void onFailure(Call<List<Wallpaper>> call, Throwable t) {
-
-              Log.d("TAG",t.getMessage());
-
-              MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(CategoryActivity.this)
-                      .setTitle("Server not responding")
-                      .setMessage("Check your connection and try again")
-                      .setCancelable(false)
-                      .setIcon(R.drawable.ic_baseline_wifi_off_24)
-                      .setPositiveButton("try again", new DialogInterface.OnClickListener() {
-                          @Override
-                          public void onClick(DialogInterface dialog, int which) {
-                              getCategoryWallpaper();
-                          }
-                      })
-                      .setNegativeButton("Back", new DialogInterface.OnClickListener() {
-                          @Override
-                          public void onClick(DialogInterface dialog, int which) {
-                              finish();
-                          }
-                      });
-              AlertDialog alertDialog = dialogBuilder.create();
-              alertDialog.show();
+              ThemeManager.getNetworkErrorDialog(CategoryActivity.this, new DialogInterface.OnClickListener() {
+                  @Override
+                  public void onClick(DialogInterface dialog, int which) {
+                      getCategoryWallpaper();
+                  }
+              }).show();
           }
       });
     }

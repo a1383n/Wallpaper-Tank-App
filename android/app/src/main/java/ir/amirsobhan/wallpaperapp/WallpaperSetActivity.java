@@ -56,6 +56,7 @@ import ir.amirsobhan.wallpaperapp.Model.ApiResult;
 import ir.amirsobhan.wallpaperapp.Model.Wallpaper;
 import ir.amirsobhan.wallpaperapp.Retrofit.ApiInterface;
 import ir.amirsobhan.wallpaperapp.Retrofit.RetrofitClient;
+import ir.amirsobhan.wallpaperapp.UI.ThemeManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -81,7 +82,9 @@ public class WallpaperSetActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        applyTheme();
+
+        setTheme(ThemeManager.getTheme(this));
+
         setContentView(R.layout.activity_wallpaper_set);
 
         Initialization();
@@ -176,28 +179,6 @@ public class WallpaperSetActivity extends AppCompatActivity {
         apiInterface = RetrofitClient.getApiInterface();
 
         db = new WallpaperDB(this);
-    }
-
-    private void applyTheme() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        switch (preferences.getString("theme", "Light")) {
-            case "Light":
-                setTheme(R.style.AppTheme);
-                break;
-            case "Dark":
-                setTheme(R.style.DarkTheme);
-                break;
-            case "System Default":
-                switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
-                    case Configuration.UI_MODE_NIGHT_YES:
-                        setTheme(R.style.DarkTheme);
-                        break;
-                    case Configuration.UI_MODE_NIGHT_NO:
-                        setTheme(R.style.AppTheme);
-                        break;
-                }
-                break;
-        }
     }
 
     public void fullScreen() {

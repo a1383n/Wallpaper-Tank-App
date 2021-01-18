@@ -27,6 +27,7 @@ import ir.amirsobhan.wallpaperapp.Model.Category;
 import ir.amirsobhan.wallpaperapp.R;
 import ir.amirsobhan.wallpaperapp.Retrofit.ApiInterface;
 import ir.amirsobhan.wallpaperapp.Retrofit.RetrofitClient;
+import ir.amirsobhan.wallpaperapp.UI.ThemeManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -107,25 +108,12 @@ public class CategoryFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Category>> call, Throwable t) {
-                MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
-                        .setTitle("Server not responding")
-                        .setMessage("Check your connection and try again")
-                        .setCancelable(false)
-                        .setIcon(R.drawable.ic_baseline_wifi_off_24)
-                        .setPositiveButton("try again", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                getAllCategory();
-                            }
-                        })
-                        .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                getActivity().finish();
-                            }
-                        });
-                AlertDialog alertDialog = dialogBuilder.create();
-                alertDialog.show();
+                ThemeManager.getNetworkErrorDialog(getActivity(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getAllCategory();
+                    }
+                });
             }
         });
     }

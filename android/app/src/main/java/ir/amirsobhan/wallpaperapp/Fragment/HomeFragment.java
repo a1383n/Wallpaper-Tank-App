@@ -37,6 +37,7 @@ import ir.amirsobhan.wallpaperapp.Model.Wallpaper;
 import ir.amirsobhan.wallpaperapp.R;
 import ir.amirsobhan.wallpaperapp.Retrofit.ApiInterface;
 import ir.amirsobhan.wallpaperapp.Retrofit.RetrofitClient;
+import ir.amirsobhan.wallpaperapp.UI.ThemeManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -126,9 +127,7 @@ public class HomeFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 refreshLayout.setRefreshing(false);
 
-                if (getContext().getSharedPreferences("root", Context.MODE_PRIVATE).getString("token",null) == null){
-                    SharedPreferences sharedPreferences = getContext().getSharedPreferences("root", Context.MODE_PRIVATE);
-
+                if (RetrofitClient.getAuthorizationToken(getContext()) == null){
                     FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                         @Override
                         public void onComplete(@NonNull Task<String> task) {
@@ -145,13 +144,13 @@ public class HomeFragment extends Fragment {
                                 @Override
                                 public void onResponse(Call<ApiResult> call, Response<ApiResult> response) {
                                     if (response.code() == 200 && response.body().getOk()) {
-                                        sharedPreferences.edit().putString("token",response.body().getToken()).apply();
+                                        RetrofitClient.storeAuthorizationToken(getContext(),response.body().getToken());
                                     }
                                 }
 
                                 @Override
                                 public void onFailure(Call<ApiResult> call, Throwable t) {
-                                    sharedPreferences.edit().putString("token",null).apply();
+                                    RetrofitClient.storeAuthorizationToken(getContext(),null);
                                 }
                             });
                         }
@@ -161,25 +160,12 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Wallpaper>> call, Throwable t) {
-                MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
-                        .setTitle("Server not responding")
-                        .setMessage("Check your connection and try again")
-                        .setCancelable(false)
-                        .setIcon(R.drawable.ic_baseline_wifi_off_24)
-                        .setPositiveButton("try again", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                getWallpaperList();
-                            }
-                        })
-                        .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                getActivity().finish();
-                            }
-                        });
-                AlertDialog alertDialog = dialogBuilder.create();
-                alertDialog.show();
+                ThemeManager.getNetworkErrorDialog(getActivity(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getWallpaperList();
+                    }
+                }).show();
             }
         });
     }
