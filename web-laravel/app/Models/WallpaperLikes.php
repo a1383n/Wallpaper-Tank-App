@@ -48,7 +48,7 @@ class WallpaperLikes extends Model
     public static function decrease(Wallpaper $wallpaper){
         // if user liked wallpaper
         if (self::isUserLiked($wallpaper->id)){
-            WallpaperLikes::where('session_id',Request::getSession()->getId())->where('wallpaper_id',$wallpaper->id)->delete();
+            WallpaperLikes::where('session_id',(Request::getSession() ? Request::getSession()->getId() : Request::header('Authorization')))->where('wallpaper_id',$wallpaper->id)->delete();
             $wallpaper->likes--;
             return $wallpaper->save();
         }

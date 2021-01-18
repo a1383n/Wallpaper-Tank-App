@@ -110,21 +110,21 @@ public class WallpaperDB extends SQLiteOpenHelper {
      * Update download status in database
      *
      * @param id
-     * @param download
      */
-    public void setDownloaded(int id, boolean download) {
+    public void setDownloaded(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        int status = (download) ? 1 : 0;
-        String sql = "UPDATE " + TABLE_NAME + " SET " + ITEM_DOWNLOAD + "=" + status + " WHERE " + KEY_ID + "=" + id + "";
+        String sql = "UPDATE " + TABLE_NAME + " SET " + ITEM_DOWNLOAD + "=" + "1" + " WHERE " + KEY_ID + "=" + id + "";
         db.execSQL(sql);
     }
 
-    public boolean isDownloaded(int id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String sql = "SELECT * FROM " + TABLE_NAME + " WHERE " + KEY_ID + "=" + id;
-        Cursor cursor = db.rawQuery(sql, null, null);
-        cursor.moveToNext();
-        return cursor.getInt(cursor.getColumnIndex(ITEM_DOWNLOAD)) == 1;
+    /**
+     * Update view status in database
+     * @param id
+     */
+    public void setView(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "UPDATE " + TABLE_NAME + " SET " + ITEM_VIEW + "=" + "1" + " WHERE " + KEY_ID + "=" + id + "";
+        db.execSQL(sql);
     }
 
 }

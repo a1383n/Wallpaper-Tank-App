@@ -1,3 +1,4 @@
+
 package ir.amirsobhan.wallpaperapp.Model;
 
 import com.google.gson.annotations.Expose;
@@ -7,25 +8,34 @@ public class Category {
 
     @SerializedName("id")
     @Expose
-    private int id;
+    private Integer id;
     @SerializedName("name")
     @Expose
     private String name;
     @SerializedName("title")
     @Expose
-    private String title;
+    private Object title;
     @SerializedName("color")
     @Expose
     private String color;
-    @SerializedName("count")
+    @SerializedName("items_count")
     @Expose
-    private String count;
+    private Integer itemsCount;
+    @SerializedName("user_id")
+    @Expose
+    private Integer userId;
+    @SerializedName("created_at")
+    @Expose
+    private String createdAt;
+    @SerializedName("updated_at")
+    @Expose
+    private String updatedAt;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -37,11 +47,11 @@ public class Category {
         this.name = name;
     }
 
-    public String getTitle() {
+    public Object getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(Object title) {
         this.title = title;
     }
 
@@ -53,12 +63,36 @@ public class Category {
         this.color = color;
     }
 
-    public String getCount() {
-        return count;
+    public Integer getItemsCount() {
+        return itemsCount;
     }
 
-    public void setCount(String count) {
-        this.count = count;
+    public void setItemsCount(Integer itemsCount) {
+        this.itemsCount = itemsCount;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
 }

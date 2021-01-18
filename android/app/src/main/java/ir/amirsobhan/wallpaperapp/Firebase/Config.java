@@ -14,4 +14,7 @@ public class Config {
 
     public static final String SHARED_PREF = "ah_firebase";
 
+
+    public static final String PRIVATE_KEY = "ABCD1234abcd";
+
 }

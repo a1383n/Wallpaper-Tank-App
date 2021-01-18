@@ -17,6 +17,11 @@ class Token extends Model
      * @throws \Exception
      */
     public static function store(Request $request){
+        
+        if(self::isExist($request->input('push_notification_token'))){
+            return ['ok'=>false];
+        }
+
         $token = new Token();
         $value = bin2hex(random_bytes(16));
 
@@ -28,6 +33,11 @@ class Token extends Model
 
     public static function verified($token_value){
         $token = Token::where('value',$token_value)->get();
+        return $token->count() > 0;
+    }
+
+    public static function isExist($push_notification_token){
+        $token = Token::where('push_token',$push_notification_token)->get();
         return $token->count() > 0;
     }
 }

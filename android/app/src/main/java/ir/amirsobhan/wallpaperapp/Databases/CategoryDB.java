@@ -52,7 +52,7 @@ public class CategoryDB extends SQLiteOpenHelper {
         values.put(ITEM_NAME, category.getName());
         values.put(ITEM_TITLE, category.getName());
         values.put(ITEM_COLOR, category.getColor());
-        values.put(ITEM_COUNT, category.getCount());
+        values.put(ITEM_COUNT, category.getItemsCount());
         db.insert(TABLE_NAME, null, values);
     }
 
