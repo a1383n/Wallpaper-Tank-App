@@ -1,9 +1,0 @@
-RewriteEngine On
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule  ^api/ajax/([^/]+)  api/ajax/index.php?action=$1 [NC,L]
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule  ^api/web/([^/]+)  api/web/index.php?action=$1 [NC,L]
