@@ -17,9 +17,13 @@ class Token extends Model
      * @throws \Exception
      */
     public static function store(Request $request){
-        
+
+        $request->validate([
+            "push_notification_token"=>"required"
+        ]);
+
         if(self::isExist($request->input('push_notification_token'))){
-            return ['ok'=>false];
+            return;
         }
 
         $token = new Token();

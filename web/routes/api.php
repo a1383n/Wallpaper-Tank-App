@@ -19,7 +19,7 @@ use App\Models\Category;
 Route::post('/newToken',function (Request $request){
    if (env('PRIVATE_KEY') == $request->input('private_key')){
         $token = Token::store($request);
-        return ($token) ? ['ok'=>true,'token'=>$token] : ['ok'=>false,'des'=>'Error while creating token'];
+        return ($token) ? ['ok'=>true,$token] : ['ok'=>false,'des'=>'Error while creating token'];
    }else{
        return ['ok'=>false,'des'=>'private_key is empty or incorrect'];
    }
@@ -69,7 +69,7 @@ Route::get('/wallpapers', function (Request $request) {
         }
 
         return $data;
-    }    
+    }
 
 });
 
@@ -150,7 +150,6 @@ Route::get('categories/{id}/wallpapers',function ($id){
 })->where('id','[0-9]+');
 
 Route::get('symlink',function (){
-$targetFolder = $_SERVER['DOCUMENT_ROOT'] . '/../storage/app/public';
-$linkFolder = $_SERVER['DOCUMENT_ROOT'] . '/storage';
-symlink($targetFolder, $linkFolder) or die("error creating symlink");
-echo 'Symlink process successfully completed';});
+    Artisan::call('storage:link');
+
+});

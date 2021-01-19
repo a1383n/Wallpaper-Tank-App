@@ -38,6 +38,11 @@
                             <label for="add-category-color-input">Category Color</label>&nbsp;
                             <input type="color" name="color" id="add-category-color-input" class="form-control">
                         </div>
+                        <div class="custom-control custom-checkbox" id="notification-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="notification-checkbox-input"
+                                   name="notification" checked>
+                            <label class="custom-control-label" for="login-form-remember-check">Send notification to android users</label>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <input type="hidden" name="id" id="add-category-id-input">
