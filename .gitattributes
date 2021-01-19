@@ -1,2 +1,2 @@
 *.php linguist-language=PHP
-android/gradlew linguist-vendored
+android/gradlew -linguist-vendored
