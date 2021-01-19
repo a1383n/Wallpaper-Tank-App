@@ -18,7 +18,7 @@ class PushNotification extends Controller
         return (new Factory())->withServiceAccount(storage_path()."/firebase_credentials.json")->createMessaging();
     }
 
-    public function sendMessage($topic,$title,$body,$image_url){
+    public function sendMessage($topic,$title,$body,$image_url = null){
         $message = CloudMessage::withTarget('topic',$topic)->withNotification(Notification::create($title,$body,$image_url));
         $this->getMessaging()->send($message);
     }
