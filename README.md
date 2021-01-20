@@ -17,8 +17,8 @@ A wallpaper management system in server-side and show on android application
  - Android-app can save wallpaper in gallery
  - Google firebase cloud messaging and Google analytics used
  
-# Run published version
-Public server-side: https://wallpaper.amirsobhan.ir
+# Test published version
+Public server-side: https://wallpaper.amirsobhan.ir <br />
 Public android version: (https://github.com/a1383n/Wallpaper-Tank-App/releases)
 (Android 4.4 and above )
 
@@ -32,7 +32,7 @@ Public android version: (https://github.com/a1383n/Wallpaper-Tank-App/releases)
  6. Run  `php artisan db:seed`  to run seeders.
  7. Run  `php artisan serve`
 
-Admin panel location:`http://{APP_URL}/admin`
+Admin panel location:`http://{APP_URL}/admin`<br />
 Demo login information:
 Email: `demo@email.com`
 Password: `demo`
