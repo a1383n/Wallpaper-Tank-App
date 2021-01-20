@@ -55,6 +55,11 @@ class CategoryController extends Controller
         $category->color = $input['color'];
         $category->user_id = Auth::id();
 
+        if ($request->filled("notification")){
+            $pushNotification = new PushNotification();
+            $pushNotification->sendMessage("category","New Category Released!",$category->name." Released!");
+        }
+
         if (sizeof(Category::where('name',$input['name'])->get()) == 0) {
             return ($category->saveOrFail()) ? ['ok' => true] : ['ok' => false, 'des' => 'Error while store value in database'];
         }else{

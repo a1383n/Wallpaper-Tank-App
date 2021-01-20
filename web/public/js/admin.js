@@ -36,6 +36,7 @@ function addButton() {
 
     $("#add-form-wallpaper-action-input").show();
     $("#add-form-wallpaper-reset-input").show();
+    $("#notification-checkbox").show();
 
     $(".modal-title").text("Add Wallpaper");
     $("#add-form-wallpaper-action-input").val("Add");
@@ -63,6 +64,7 @@ function addButton() {
             formData.append("title", $("#add-form-wallpaper-title-input").val());
             formData.append("category_id", $("#add-form-wallpaper-category-input").val());
             formData.append("tags", $("#add-form-wallpaper-tags-array-string").val());
+            formData.append("notification",$("#notification-checkbox-input").val());
             formData.append("image", file[0]);
         }
 
@@ -135,6 +137,8 @@ function addTagToArray(title) {
 }
 
 function viewButton(id) {
+    $("#notification-checkbox").hide();
+
     console.log("log");
     $("#addModal").modal();
     resetForm("add-wallpaper-form");
@@ -174,6 +178,8 @@ function editButton(id) {
 
     $("#add-form-wallpaper-action-input").show();
     $("#add-form-wallpaper-reset-input").show();
+    $("#notification-checkbox").hide();
+
 
     resetForm("add-wallpaper-form");
     $(".modal-title").text("Edit Wallpaper");
@@ -278,7 +284,9 @@ function deleteButton(id) {
 function addCategory(){
     $("#add-category-action").val("Add");
     $("#add-category-name-input").val("");
-    $("#add-category-color-input").val("#333333");
+    $("#add-category-color-input").val("#333333")
+
+    $("#notification-checkbox").show();
 
     $(document).off("submit","#add-category-form");
     $(document).on("submit","#add-category-form",function (event) {
@@ -289,6 +297,7 @@ function addCategory(){
             formData.append("name", $("#add-category-name-input").val());
             formData.append('title', $("#add-category-name-input").val().toUpperCase())
             formData.append("color", $("#add-category-color-input").val());
+            formData.append("notification",$("#notification-checkbox-input").val());
 
             formData.append('action','PUT');
 

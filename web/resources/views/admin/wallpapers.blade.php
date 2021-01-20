@@ -78,6 +78,11 @@
                                     file</label>
                             </div>
                         </div>
+                        <div class="custom-control custom-checkbox" id="notification-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="notification-checkbox-input"
+                                   name="notification" checked>
+                            <label class="custom-control-label" for="login-form-remember-check">Send notification to android users</label>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <input type="hidden" name="wallpaper_id" id="add-form-wallpaper-id-input">
@@ -85,7 +90,7 @@
                         <input type="submit" class="btn btn-success" name="action" id="add-form-wallpaper-action-input"
                                value="Add">
                         <input type="reset" class="btn btn-danger" name="reset" id="add-form-wallpaper-reset-input">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </form>

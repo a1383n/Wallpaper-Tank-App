@@ -9,10 +9,9 @@ use App\Models\WallpapersDownload;
 use App\Models\WallpaperViews;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use App\Http\Controllers\PushNotification;
 
 class WallpaperController extends Controller
 {
@@ -127,7 +126,7 @@ class WallpaperController extends Controller
         $temp_image = Image::make($image->getRealPath());
         $resize_height = floor($temp_image->height() * (300 / $temp_image->width()));
         $temp_image->resize(300, $resize_height);
-        $temp_image->save('storage/wallpapers/' . $path . '/temp.' . $image->extension());
+        $temp_image->save(storage_path('app/public/wallpapers/'). $path . '/temp.' . $image->extension());
         $temp_url = env('APP_URL') . Storage::url('wallpapers/' . $path . '/temp.' . $image->extension());
 
         $wallpaper->wallpaper_url = $wallpaper_url;
@@ -138,6 +137,12 @@ class WallpaperController extends Controller
             $category = Category::find($wallpaper->category_id);
             $category->items_count++;
             $category->save();
+
+            if ($request->filled("notification")) {
+                $pushNotification = new PushNotification();
+                $pushNotification->sendMessage("wallpaper","New Wallpaper Released!","New wallpaper in ".Category::find($wallpaper->category_id)->name." category",$wallpaper->temp_url);
+            }
+
             return ['ok' => true];
         } else {
             return ['ok' => false, 'des' => 'Error while store value in database'];
@@ -194,12 +199,11 @@ class WallpaperController extends Controller
         $request->validate([
             'id'=>'required'
         ]);
-
-        Wallpaper::findOrfail($request->input('id'))->delete();
-
         $category = Category::find(Wallpaper::find($request->input('id'))->category_id);
         $category->items_count--;
         $category->save();
+
+        Wallpaper::findOrfail($request->input('id'))->delete();
 
         return ['ok'=>true];
     }
