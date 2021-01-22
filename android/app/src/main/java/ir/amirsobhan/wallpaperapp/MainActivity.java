@@ -5,7 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,6 +19,8 @@ import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -22,8 +28,14 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import ir.amirsobhan.wallpaperapp.Adapter.MainViewPagerAdapter;
 import ir.amirsobhan.wallpaperapp.Firebase.Config;
 import ir.amirsobhan.wallpaperapp.Firebase.NotificationUtils;
+import ir.amirsobhan.wallpaperapp.Model.ApiResult;
+import ir.amirsobhan.wallpaperapp.Retrofit.ApiInterface;
+import ir.amirsobhan.wallpaperapp.Retrofit.RetrofitClient;
 import ir.amirsobhan.wallpaperapp.UI.BottomNavigationBehavior;
 import ir.amirsobhan.wallpaperapp.UI.ThemeManager;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigationView;
@@ -55,12 +67,15 @@ public class MainActivity extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         navigationView.getMenu().findItem(R.id.menu_home).setChecked(true);
+                        findViewById(R.id.search_btn).setVisibility(View.VISIBLE);
                         break;
                     case 1:
                         navigationView.getMenu().findItem(R.id.menu_category).setChecked(true);
+                        findViewById(R.id.search_btn).setVisibility(View.GONE);
                         break;
                     case 2:
                         navigationView.getMenu().findItem(R.id.menu_setting).setChecked(true);
+                        findViewById(R.id.search_btn).setVisibility(View.GONE);
                         break;
                 }
             }
@@ -126,6 +141,42 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+
+
+        if (RetrofitClient.getAuthorizationToken(getApplicationContext()) == null){
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if (!task.isSuccessful()) {
+                        Log.w("token", "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+
+                    // Get FCM registration token
+                    String token = task.getResult();
+
+                    ApiInterface apiInterface = RetrofitClient.getApiInterface();
+
+                    //Send to server
+                    apiInterface.newToken(Config.PRIVATE_KEY,token).enqueue(new Callback<ApiResult>() {
+                        @Override
+                        public void onResponse(Call<ApiResult> call, Response<ApiResult> response) {
+                            Log.d("token",response.body().toString());
+                            if (response.code() == 200 && response.body().getOk()) {
+                                RetrofitClient.storeAuthorizationToken(getApplicationContext(),response.body().getToken());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ApiResult> call, Throwable t) {
+                            RetrofitClient.storeAuthorizationToken(getApplicationContext(),null);
+                        }
+                    });
+                }
+            });
+        }else{
+            Log.d("token",RetrofitClient.getAuthorizationToken(getApplicationContext()));
+        }
     }
 
     @Override

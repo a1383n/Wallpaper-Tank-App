@@ -2,17 +2,20 @@ package ir.amirsobhan.wallpaperapp.Fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -20,19 +23,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ir.amirsobhan.wallpaperapp.Adapter.WallpaperAdapter;
 import ir.amirsobhan.wallpaperapp.Databases.WallpaperDB;
-import ir.amirsobhan.wallpaperapp.Firebase.Config;
-import ir.amirsobhan.wallpaperapp.Model.ApiResult;
 import ir.amirsobhan.wallpaperapp.Model.Wallpaper;
 import ir.amirsobhan.wallpaperapp.R;
 import ir.amirsobhan.wallpaperapp.Retrofit.ApiInterface;
@@ -48,8 +45,11 @@ public class HomeFragment extends Fragment {
     ProgressBar progressBar;
     WallpaperAdapter adapter;
     List<Wallpaper> wallpaperList = new ArrayList<Wallpaper>();
+    List<Wallpaper> search_result = new ArrayList<Wallpaper>();
     WallpaperDB db;
     SwipeRefreshLayout refreshLayout;
+    EditText searchBox;
+    ImageView searchBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,7 +82,63 @@ public class HomeFragment extends Fragment {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                searchBox.setVisibility(View.GONE);
                 getWallpaperList();
+            }
+        });
+
+        //When search button click
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // If searchBox VISIBLE hide it
+               if (searchBox.getVisibility() == View.VISIBLE){
+                   searchBtn.setImageResource(R.drawable.ic_w_baseline_search_24);
+                   searchBox.setVisibility(View.GONE);
+                   searchBox.setText("");
+                   adapter.updateList(wallpaperList);
+
+                   //hide keyboard
+                   InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                   imm.hideSoftInputFromWindow(searchBox.getWindowToken(), 0);
+               } // If searchBox GONE show it
+               else {
+                   searchBtn.setImageResource(R.drawable.ic_baseline_close_24);
+                   searchBox.setVisibility(View.VISIBLE);
+                   searchBox.requestFocus();
+
+                   // show keyboard
+                   InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                   imm.showSoftInput(searchBox, InputMethodManager.SHOW_IMPLICIT);
+               }
+            }
+        });
+
+        // On text change in searchBox
+        searchBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(TextUtils.isEmpty(s.toString())){
+                    adapter.updateList(wallpaperList);
+                }else{
+                    search_result.clear();
+                    for (Wallpaper wallpaper : wallpaperList) {
+                        if(wallpaper.getTitle().toLowerCase().indexOf(s.toString().toLowerCase(),0) != -1){
+                            search_result.add(wallpaper);
+                        }
+                    }
+                    adapter.updateList(search_result);
+                }
             }
         });
 
@@ -100,6 +156,28 @@ public class HomeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.wallpaper_recycler);
         progressBar = view.findViewById(R.id.wallpaper_recycler_progress);
         refreshLayout = view.findViewById(R.id.home_refresh);
+        searchBtn = getActivity().findViewById(R.id.search_btn);
+        searchBox = view.findViewById(R.id.search_box);
+
+        //if list scroll down hide searchBox
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0){
+                    if (searchBox.getVisibility() == View.VISIBLE) {
+                        searchBtn.setImageResource(R.drawable.ic_w_baseline_search_24);
+                        searchBox.setVisibility(View.GONE);
+                        searchBox.setText("");
+                        adapter.updateList(wallpaperList);
+
+                        //hide keyboard
+                        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(searchBox.getWindowToken(), 0);
+                    }
+                }
+            }
+        });
     }
 
     private void getWallpaperList() {
@@ -119,43 +197,14 @@ public class HomeFragment extends Fragment {
                 }
 
                 //set adapter and show recyclerView
-                adapter = new WallpaperAdapter(getContext(), response.body());
+                wallpaperList = response.body();
+                adapter = new WallpaperAdapter(getContext(), wallpaperList);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setVisibility(View.VISIBLE);
 
                 //hide progress bar
                 progressBar.setVisibility(View.GONE);
                 refreshLayout.setRefreshing(false);
-
-                if (RetrofitClient.getAuthorizationToken(getContext()) == null){
-                    FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-                        @Override
-                        public void onComplete(@NonNull Task<String> task) {
-                            if (!task.isSuccessful()) {
-                                Log.w("token", "Fetching FCM registration token failed", task.getException());
-                                return;
-                            }
-
-                            // Get FCM registration token
-                            String token = task.getResult();
-
-                            //Send to server
-                            apiInterface.newToken(Config.PRIVATE_KEY,token).enqueue(new Callback<ApiResult>() {
-                                @Override
-                                public void onResponse(Call<ApiResult> call, Response<ApiResult> response) {
-                                    if (response.code() == 200 && response.body().getOk()) {
-                                        RetrofitClient.storeAuthorizationToken(getContext(),response.body().getToken());
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<ApiResult> call, Throwable t) {
-                                    RetrofitClient.storeAuthorizationToken(getContext(),null);
-                                }
-                            });
-                        }
-                    });
-                }
             }
 
             @Override

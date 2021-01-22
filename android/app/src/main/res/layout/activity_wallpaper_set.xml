@@ -55,7 +55,7 @@
                 android:indeterminate="true" />
         </LinearLayout>
 
-        <ImageView
+        <com.github.chrisbanes.photoview.PhotoView
             android:id="@+id/full_wallpaper"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

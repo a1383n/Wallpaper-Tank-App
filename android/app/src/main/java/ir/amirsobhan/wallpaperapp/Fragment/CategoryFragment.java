@@ -89,6 +89,11 @@ public class CategoryFragment extends Fragment {
                 for (Category category : response.body()) {
                     if (!db.isExist(category.getId())){
                         db.Insert(category);
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         BottomNavigationView navigationView = getActivity().findViewById(R.id.bottom_navigation);
                         navigationView.getOrCreateBadge(R.id.menu_category).setNumber(navigationView.getOrCreateBadge(R.id.menu_category).getNumber() + 1);
                     }
