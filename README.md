@@ -18,27 +18,11 @@ A wallpaper management system in server-side and show on android application
  - Google firebase cloud messaging and Google analytics used
  
 # Test published version
-Public server-side: https://wallpaper.amirsobhan.ir <br />
+Public server-side: (https://wallpaper-tank.herokuapp.com) <br />
 Public android version: (https://github.com/a1383n/Wallpaper-Tank-App/releases)
 (Android 4.4 and above )
 
-## How to run server-side
-
- 1. Rename `.env.example` file to `.env`inside project root and fill the database information.
- 2. Open the console and cd your in project root directory
- 3. Run `composer install`
- 4. Run  `php artisan key:generate`
- 5. Run  `php artisan migrate`
- 6. Run  `php artisan db:seed`  to run seeders.
- 7. Run  `php artisan serve`
-
-Admin panel location:`http://{APP_URL}/admin`<br />
-Demo login information:
-Email: `demo@email.com`
+Demo login information: <br />
+Email: `demo@email.com` <br />
 Password: `demo`
-
-## How to run android-app
-
- 1. Sync `PRIVATE_KEY` value in server-side with config file in `Firebase/Config.java`
- 2. Change `BASE_URL` with `http://{APP_URL}/api` in `Retrofit/RetrofitClient.java` file
  
