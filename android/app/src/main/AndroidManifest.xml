@@ -18,9 +18,10 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".CategoryActivity"
-            android:theme="@style/AppTheme"></activity>
-        <activity android:name=".WallpaperSetActivity" />
-        <activity android:name=".MainActivity">
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".WallpaperSetActivity" android:screenOrientation="portrait" />
+        <activity android:name=".MainActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
