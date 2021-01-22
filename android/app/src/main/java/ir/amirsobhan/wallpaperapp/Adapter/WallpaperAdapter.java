@@ -37,7 +37,7 @@ import retrofit2.Response;
 
 public class WallpaperAdapter extends RecyclerView.Adapter<WallpaperAdapter.WallpaperViewHolder> {
     private final Context context;
-    private final List<Wallpaper> wallpaperList;
+    private List<Wallpaper> wallpaperList;
     private final WallpaperDB db;
     private boolean newLike_ok;
     private boolean removeLike_ok;
@@ -182,6 +182,11 @@ public class WallpaperAdapter extends RecyclerView.Adapter<WallpaperAdapter.Wall
             }
         });
 
+    }
+
+    public void updateList(List<Wallpaper> list){
+        wallpaperList = list;
+        notifyDataSetChanged();
     }
 
     @Override

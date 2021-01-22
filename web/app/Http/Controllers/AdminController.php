@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Token;
 use App\Models\Wallpaper;
 use App\Models\WallpaperViews;
 use Carbon\Carbon;
@@ -24,6 +25,7 @@ class AdminController extends Controller
         return view('admin.home',['where'=>'index',
             'wallpaper'=>Wallpaper::get(),
             'category'=>Category::get(),
+            'android'=>Token::get(),
             'views'=>$views,
             'chart_days'=>WallpaperViews::getLast5Day(),
             'chart_values'=>WallpaperViews::getLast5DayValues()

@@ -17,9 +17,9 @@ use App\Models\Category;
 |
 */
 Route::post('/newToken',function (Request $request){
-   if (env('PRIVATE_KEY') == $request->input('private_key')){
+   if (env("PRIVATE_KEY") == $request->input('private_key')){
         $token = Token::store($request);
-        return ($token) ? ['ok'=>true,$token] : ['ok'=>false,'des'=>'Error while creating token'];
+        return ($token) ? ['ok'=>true,"token"=>$token] : ['ok'=>false,'des'=>'Error while creating token'];
    }else{
        return ['ok'=>false,'des'=>'private_key is empty or incorrect'];
    }
@@ -27,7 +27,7 @@ Route::post('/newToken',function (Request $request){
 
 
 Route::get('/wallpapers', function (Request $request) {
-    $wallpapers = Wallpaper::get();
+    $wallpapers = Wallpaper::orderBy("id","desc")->get();
     //Check if request from dataTable plugin
     if (!empty($request->input('_')) && $request->ajax()) {
         $data = array();
@@ -98,7 +98,7 @@ Route::get('wallpapers/{id}/download',function ($id,Request $request){
 })->middleware(\App\Http\Middleware\isAuthorized::class)->where('id','[0-9]+');
 
 Route::get('categories', function (Request $request) {
-    $categories = Category::get();
+    $categories = Category::orderBy("id","desc")->get();
 
     //Check if request from dataTable plugin
     if (!empty($request->get('_')) && $request->ajax()) {

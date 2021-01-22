@@ -27,7 +27,7 @@
         </span>
             <div class="panel-box-content">
                 <span style="text-transform: uppercase">Android</span>
-                <span style="display: block;font-weight: bold;font-size: 18px;">4</span>
+                <span style="display: block;font-weight: bold;font-size: 18px;">{{$android->count()}}</span>
             </div>
         </div>
         <div class="panel-box col-md-3 col-sm-6 col-xs-12">

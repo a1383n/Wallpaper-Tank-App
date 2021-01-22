@@ -37,6 +37,7 @@ function addButton() {
     $("#add-form-wallpaper-action-input").show();
     $("#add-form-wallpaper-reset-input").show();
     $("#notification-checkbox").show();
+    $(".custom-file").show();
 
     $(".modal-title").text("Add Wallpaper");
     $("#add-form-wallpaper-action-input").val("Add");
@@ -52,6 +53,7 @@ function addButton() {
     //Remove img tag
     $("#addModal .modal-body img").remove();
 
+    $(document).off("submit","#add-wallpaper-form");
     $(document).on("submit", "#add-wallpaper-form", function (event) {
         event.preventDefault();
         const formData = new FormData();
@@ -84,8 +86,14 @@ function addButton() {
             success: function (responseJSON) {
                 console.log("ok");
                 if (responseJSON['ok'] == true) {
+                    document.getElementById("add-form-wallpaper-action-input").disabled = false;
+                    $("#add-form-wallpaper-tags-array-string").val("");
                     $("#addModal").modal("hide");
                     reloadTable();
+                }else{
+                    alert("Error! See console :(")
+                    console.log(responseJSON);
+                    document.getElementById("add-form-wallpaper-action-input").disabled = false;
                 }
             }
         });
@@ -180,6 +188,8 @@ function editButton(id) {
     $("#add-form-wallpaper-reset-input").show();
     $("#notification-checkbox").hide();
 
+     // Hide file input
+    $(".custom-file").hide();
 
     resetForm("add-wallpaper-form");
     $(".modal-title").text("Edit Wallpaper");
@@ -209,8 +219,6 @@ function editButton(id) {
             for (i = 0; i < array.length; i++) {
                 newTagButtonGenerator(array[i]);
             }
-            // Hide file input
-            $(".custom-file").hide();
 
             // Set selected category
             const options = document.getElementById("add-form-wallpaper-category-input").getElementsByTagName("option");
@@ -227,6 +235,7 @@ function editButton(id) {
         }
     });
 
+    if($("#add-form-wallpaper-action-input").val() === "Edit"){
     document.getElementById("add-form-wallpaper-action-input").addEventListener("click", function () {
         document.getElementById("add-form-wallpaper-action-input").disabled = true;
         const formData = new FormData();
@@ -249,12 +258,18 @@ function editButton(id) {
             success: function (responseJSON) {
                 if (responseJSON['ok']) {
                     document.getElementById("add-form-wallpaper-action-input").disabled = false;
+                    $("#add-form-wallpaper-tags-array-string").val("");
                     $("#addModal").modal("hide");
                     reloadTable();
+                }else{
+                    alert("Error! See console :(")
+                    console.log(responseJSON);
+                    document.getElementById("add-form-wallpaper-action-input").disabled = false;
                 }
             }
         });
     })
+}
 }
 
 function deleteButton(id) {

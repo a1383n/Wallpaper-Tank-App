@@ -105,8 +105,7 @@ class WallpaperController extends Controller
         $request->validate([
             'title' => 'required',
             'category_id' => 'required|int',
-            'tags' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:5120'/*5M*/
+            'tags' => 'required'
         ]);
 
         $wallpaper = new Wallpaper();
