@@ -101,11 +101,9 @@ class CategoryController extends Controller
         $category->title = null;
         $category->color = $input['color'];
 
-        if (sizeof(Category::where('name',$input['name'])->get()) == 0) {
-            return ($category->saveOrFail()) ? ['ok' => true] : ['ok' => false, 'des' => 'Error while store value in database'];
-        }else{
-            return ['ok'=>false,'des'=>'Category is duplicate!'];
-        }    }
+        return ($category->saveOrFail()) ? ['ok' => true] : ['ok' => false, 'des' => 'Error while store value in database'];
+      
+     }
 
     /**
      * Remove the specified resource from storage.
