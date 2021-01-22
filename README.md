@@ -19,7 +19,7 @@ A wallpaper management system in server-side and show on android application
  
 # Test published version
 Public server-side: (https://wallpaper-tank.herokuapp.com) <br />
-Public android version: (https://github.com/a1383n/Wallpaper-Tank-App/releases)
+Public android version: (https://github.com/a1383n/Wallpaper-Tank-App/releases/latest)
 (Android 4.4 and above )
 
 Demo login information: <br />
