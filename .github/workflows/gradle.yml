@@ -23,6 +23,6 @@ jobs:
     - name: Go to android folder
       run: cd android
     - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      run: chmod +x android/gradlew
     - name: Build with Gradle
-      run: ./gradlew build
+      run: android/gradlew build
