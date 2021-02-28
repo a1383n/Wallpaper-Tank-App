@@ -23,7 +23,9 @@ jobs:
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
       working-directory: ${{env.working-directory}}
     - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      run: | 
+          composer update
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       working-directory: ${{env.working-directory}}  
     - name: Generate key
       run: php artisan key:generate
