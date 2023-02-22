@@ -37,6 +37,7 @@ jobs:
 
       - name: Get Composer Cache Directory
         id: composer-cache
+        working-directory: ./web
         run: |
           echo "::set-output name=dir::$(composer config cache-files-dir)"
       - uses: actions/cache@v3
@@ -47,10 +48,13 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
+        working-directory: ./web
         run: composer install --no-interaction --no-progress
 
       - name: Configure laravel
+        working-directory: ./web
         run: cp .env.example .env && php artisan key:generate && php artisan migrate
 
       - name: Execute tests
+        working-directory: ./web
         run: vendor/bin/phpunit
