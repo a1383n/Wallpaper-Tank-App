@@ -1,40 +1,56 @@
-name: Laravel
+name: Laravel Test CI
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - "master"
+      - "*.x"
   pull_request:
-    branches: [ master ]
 
 jobs:
-  laravel-tests:
-
+  tests:
     runs-on: ubuntu-latest
-    
-    env : 
-         working-directory: ./web
-    
+    services:
+      mariadb:
+        image: mariadb:10.7.3
+        env:
+          MYSQL_USER: root
+          MYSQL_ALLOW_EMPTY_PASSWORD: 1
+          MYSQL_DATABASE: laravel
+        ports:
+          - "3306:3306"
+      redis:
+        image: redis:6.2.6
+        ports:
+          - "6379:6379"
+
     steps:
-    - uses: shivammathur/setup-php@b7d1d9c9a92d8d8463ce36d7f60da34d461724f8
-      with:
-        php-version: '7.4'
-    - uses: actions/checkout@v2
-    - name: Copy .env
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-      working-directory: ${{env.working-directory}}
-    - name: Install Dependencies
-      run: | 
-          composer update
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      working-directory: ${{env.working-directory}}  
-    - name: Generate key
-      run: php artisan key:generate
-      working-directory: ${{env.working-directory}}
-    - name: Directory Permissions
-      run: chmod -R 777 storage bootstrap/cache
-      working-directory: ${{env.working-directory}}
-    - name: Create Database
-      run: |
-        mkdir -p database
-        touch database/database.sqlite
-      working-directory: ${{env.working-directory}}
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, igbinary, redis, lzf
+          coverage: none
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress
+
+      - name: Configure laravel
+        run: cp .env.example .env && php artisan key:generate && php artisan migrate
+
+      - name: Execute tests
+        run: vendor/bin/phpunit
