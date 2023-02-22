@@ -1,74 +1,91 @@
-# For more information: https://laravel.com/docs/sail
-version: '3'
-services:
-    laravel.test:
-        build:
-            context: ./vendor/laravel/sail/runtimes/8.0
-            dockerfile: Dockerfile
-            args:
-                WWWGROUP: '${WWWGROUP}'
-        image: sail-8.0/app
-        ports:
-            - '${APP_PORT:-80}:80'
-        environment:
-            WWWUSER: '${WWWUSER}'
-            LARAVEL_SAIL: 1
-        volumes:
-            - '.:/var/www/html'
-        networks:
-            - sail
-        depends_on:
-            - mysql
-            - redis
-            # - selenium
-    # selenium:
-    #     image: 'selenium/standalone-chrome'
-    #     volumes:
-    #         - '/dev/shm:/dev/shm'
-    #     networks:
-    #         - sail
-    #     depends_on:
-    #         - laravel.test
-    mysql:
-        image: 'mysql:8.0'
-        ports:
-            - '${FORWARD_DB_PORT:-3306}:3306'
-        environment:
-            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
-            MYSQL_DATABASE: '${DB_DATABASE}'
-            MYSQL_USER: '${DB_USERNAME}'
-            MYSQL_PASSWORD: '${DB_PASSWORD}'
-            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-        volumes:
-            - 'sailmysql:/var/lib/mysql'
-        networks:
-            - sail
-    redis:
-        image: 'redis:alpine'
-        ports:
-            - '${FORWARD_REDIS_PORT:-6379}:6379'
-        volumes:
-            - 'sailredis:/data'
-        networks:
-            - sail
-    # memcached:
-    #     image: 'memcached:alpine'
-    #     ports:
-    #         - '11211:11211'
-    #     networks:
-    #         - sail
-    mailhog:
-        image: 'mailhog/mailhog:latest'
-        ports:
-            - 1025:1025
-            - 8025:8025
-        networks:
-            - sail
-networks:
-    sail:
-        driver: bridge
+version: '3.6'
+
 volumes:
-    sailmysql:
-        driver: local
-    sailredis:
-        driver: local
+  application_sourcecode:
+  application_storage:
+  database_storage:
+
+services:
+  webserver:
+    image: nginx:stable
+    container_name: "Webserver"
+    restart: unless-stopped
+    environment:
+      TZ: "Asia/Tehran"
+    ports:
+      - "80:80"
+    volumes:
+      - "application_sourcecode:/var/www/laravel:ro"
+      - "application_storage:/var/www/laravel/storage:ro"
+      - "./docker/nginx/nginx.conf:/etc/nginx/nginx.conf"
+      - "./docker/nginx/site.conf:/etc/nginx/conf.d/default.conf"
+    depends_on:
+      - app
+      - phpmyadmin
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: wallpaper-tank:1.0.0
+    container_name: "Application"
+    restart: unless-stopped
+    working_dir: /var/www/laravel
+    environment:
+      TZ: Asia/Tehran
+      APP_ENV: local
+      APP_DEBUG: true
+      APP_KEY: "base64:v9aQB04EaBUc/aMD9jLPVFTReojAVyO7AgZg3AydRYI="
+      CACHE_DRIVER: redis
+      SESSION_DRIVER: redis
+      QUEUE_DRIVER: redis
+      DB_HOST: mariadb
+      DB_USERNAME: laravel
+      DB_PASSWORD: password
+      DB_DATABASE: laravel
+      REDIS_HOST: redis
+    volumes:
+      - "application_sourcecode:/var/www/laravel"
+      - "application_storage:/var/www/laravel/storage"
+    depends_on:
+      - mariadb
+      - redis
+
+
+  mariadb:
+    image: mariadb:10
+    container_name: "Database"
+    restart: unless-stopped
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 0
+      MYSQL_RANDOM_ROOT_PASSWORD: 1
+      MYSQL_USER: "laravel"
+      MYSQL_PASSWORD: "password"
+      MYSQL_DATABASE: "laravel"
+      TZ: "Asia/Tehran"
+    volumes:
+      - "database_storage:/var/lib/mysql"
+    ports:
+      - "3306:3306" # For testing purposes only
+
+  redis:
+    image: redis:7
+    container_name: "Redis"
+    restart: unless-stopped
+    environment:
+      TZ: "Asia/Tehran"
+    ports:
+      - "6379:6379" # For testing purposes only
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.0
+    container_name: "PHPMyAdmin"
+    restart: unless-stopped
+    environment:
+      PMA_ARBITRARY: 0
+      PMA_HOST: mariadb
+      TZ: "Asia/Tehran"
+    depends_on:
+      - mariadb
+    ports:
+      - "8080:80"
