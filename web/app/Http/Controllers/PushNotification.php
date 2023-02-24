@@ -15,11 +15,11 @@ class PushNotification extends Controller
      * @return \Kreait\Firebase\Messaging
      */
     public function getMessaging(){
-        return (new Factory())->withServiceAccount(storage_path()."/firebase_credentials.json")->createMessaging();
+       // return (new Factory())->withServiceAccount(storage_path()."/firebase_credentials.json")->createMessaging();
     }
 
     public function sendMessage($topic,$title,$body,$image_url = null){
-        $message = CloudMessage::withTarget('topic',$topic)->withNotification(Notification::create($title,$body,$image_url));
-        $this->getMessaging()->send($message);
+      //  $message = CloudMessage::withTarget('topic',$topic)->withNotification(Notification::create($title,$body,$image_url));
+      //  $this->getMessaging()->send($message);
     }
 }
